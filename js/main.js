@@ -363,6 +363,19 @@
       '<div class="foot-bottom"><p class="legal">' + esc(t("f.legal", { year: new Date().getFullYear(), name: L(S.name), place: L(S.place) })) + "</p>" +
       '<div class="foot-meta"><div class="foot-sub">' + counterHtml() + cred + "</div></div></div></div></footer>");
     fetchVisitorCount();
+    syncFollowWidth();
+  }
+
+  /* "Follow us" row gets exactly the width of the visitor/credit row below, so left and right edges line up. */
+  function syncFollowWidth() {
+    var sub = document.querySelector(".foot-sub"), fol = document.querySelector(".foot-follow");
+    if (!sub || !fol) return;
+    function sync() {
+      fol.style.width = window.matchMedia("(max-width: 680px)").matches ? "" : sub.getBoundingClientRect().width + "px";
+    }
+    sync();
+    if (window.ResizeObserver) new ResizeObserver(sync).observe(sub);
+    window.addEventListener("resize", sync);
   }
 
   /* ---------- static texts ---------- */
