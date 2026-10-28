@@ -792,7 +792,7 @@
       if (!photos.length) { if (sec) sec.hidden = true; return; }
       if (sec) sec.hidden = false;
       var cap = document.getElementById("home-gallery-title");
-      var pick = (SS.shuffle === true ? shuffle(photos) : photos).slice(0, SS.count || 14);
+      var pick = (SS.shuffle === true ? shuffle(photos) : photos).slice(0, (SS.count === 0 || SS.count === "all") ? undefined : (SS.count || 14));
       if (cap) cap.textContent = pick.length === 1 ? ": " + L(pick[0].albumTitle) : "";
 
       put("home-gallery",
