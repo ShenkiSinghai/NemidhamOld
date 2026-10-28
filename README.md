@@ -6,7 +6,7 @@ Shri 1008 Neminath Digambar Jain Mandir, Nemidham. This file is about one thing 
 
 A few universal rules, true almost everywhere in this file:
 - **`hidden: true`** on any block hides it from the site without deleting it — the safest way to "remove" something you might want back later.
-- **`home: false`** on a yojana or karyakram keeps it on its own full page but leaves it off the Home page.
+- **`pinned: true`** on a yojana, a karyakram or an announcement puts it on the **Home page** as well (see "How to pin" just below). Without it, the item shows only on its own page.
 - Content is written as **`{ hi: "...", en: "..." }`** — fill both the Hindi and English versions when you add something new. Leaving one blank means that language shows nothing there.
 - To add a new entry in a list (a new yojana, karyakram, team member…), copy one whole existing block, paste it right below, and edit the copy. To remove one, delete its block entirely (or use `hidden: true` if you're not sure yet).
 
@@ -14,15 +14,24 @@ A few universal rules, true almost everywhere in this file:
 
 ## Home page (`index.html`)
 
-Built automatically from other sections — there's nothing to edit specifically "on the home page." It pulls: today's timings (from `SITE.timings`), every yojana (unless `home: false`), the pinned announcements, the next 3 karyakram, and the photo slideshow. Hide any one of these sections from Home only (keeping it elsewhere) with `home: false` on individual items — see each section below.
+Built automatically from other sections — there's nothing to edit specifically "on the home page." It pulls: today's timings (from `SITE.timings`), the **pinned** yojanayen, the **pinned** announcements, the next 3 **pinned** upcoming karyakram, and the photo slideshow.
+
+### How to pin (what shows on Home)
+
+Yojanayen, karyakram and announcements work the same way: **only items with `pinned: true` appear on the Home page.** Everything else still appears on its own full page (Yojanayen / Karyakram / Announcements).
+
+- **To pin:** open `js/data.js`, find the item's `{ ... }` block and add the line `pinned: true,` inside it (next to its other lines).
+- **To unpin:** change it to `pinned: false,` or delete that line. The item stays on its own page.
+- If *nothing* in a group is pinned, that whole section (heading and "see all" link too) is simply left out of the Home page. A karyakram that is pinned drops off Home by itself once its date has passed.
+- Right now all 5 yojanayen, the "Welcome" announcement and the 9 November karyakram are pinned. Unpin the ones you don't want on Home.
 
 ## Announcements (`announcements.html`, highlights on Home)
 
-`window.ANNOUNCEMENTS` — an array of `{ date, pinned, title, text }`. Every announcement (pinned or not) always shows on the full **Announcements** page (in the menu under Karyakram). Only the **pinned** ones show on Home, so Home doesn't fill up with routine notices — set `pinned: true` on whichever one or two you want visitors to see right away. If nothing is pinned, the Home section simply says there are no announcements (the "All announcements" link still works). `date` is optional. Add a new announcement by copying a block; remove by deleting it, or `hidden: true` to park it (hidden from both places).
+`window.ANNOUNCEMENTS` — an array of `{ date, pinned, title, text }`. Every announcement (pinned or not) always shows on the full **Announcements** page (in the menu under Karyakram). Only the **pinned** ones show on Home, so Home doesn't fill up with routine notices — set `pinned: true` on whichever one or two you want visitors to see right away. If nothing is pinned, the announcements section is left out of Home. `date` is optional. Add a new announcement by copying a block; remove by deleting it, or `hidden: true` to park it (hidden from both places).
 
 ## Karyakram (`karyakram.html`)
 
-`window.EVENTS` — each one is `{ date, endDate, time, title, type, text, home }`. `endDate` is only needed for multi-day events. New karyakram: copy a block, change date/time/title. Old ones don't need manual cleanup — anything more than 30 days past its date quietly drops off the "past" tab by itself (change `SITE.karyakramPastDays` in `data.js` for a longer or shorter window; `-1` keeps them all). To remove one immediately: `hidden: true`, or delete the block.
+`window.EVENTS` — each one is `{ date, endDate, time, place, title, type, text, pinned }` (`pinned: true` also shows an upcoming karyakram on Home — see "How to pin"). `endDate` is only needed for multi-day events. New karyakram: copy a block, change date/time/title. Old ones don't need manual cleanup — anything more than 30 days past its date quietly drops off the "past" tab by itself (change `SITE.karyakramPastDays` in `data.js` for a longer or shorter window; `-1` keeps them all). To remove one immediately: `hidden: true`, or delete the block.
 
 ## Jain Calendar (`calendar.html`)
 
@@ -30,7 +39,7 @@ Built automatically from other sections — there's nothing to edit specifically
 
 ## Yojanayein (`yojana.html`)
 
-`window.YOJANA` — each entry: `title`, `short` (one-line, used on Home), `status` (`"active"`, `"soon"`, etc. — controls the little pill label), `details` (a list of bullet points), `summary` (longer text for the Yojanayen page), `target` / `raised` (optional amounts), and an optional `link: { href, text }` button. `home: false` keeps it off the Home spotlight; `hidden: true` removes it everywhere.
+`window.YOJANA` — each entry: `title`, `short` (one-line, used on Home), `status` (`"active"`, `"soon"`, etc. — controls the little pill label), `details` (a list of bullet points), `summary` (longer text for the Yojanayen page), `target` / `raised` (optional amounts), and an optional `link: { href, text }` button. `pinned: true` also shows it on the Home page (see "How to pin"); `hidden: true` removes it everywhere.
 
 ## Gallery (`gallery.html`)
 
@@ -78,7 +87,21 @@ Several pieces, all inside or near `window.DAAN`:
 - **`inPerson`** — the text for the "at the mandir" card.
 - Leave any of the three (`upiId`/`qrImage`, `bank`, `inPerson`) blank/empty and that whole card just doesn't show.
 
-- **`window.RECURRING`** — the "Niyamit daan aur seva" cards (Masik Dravya Daan, Saptahik/Masik Shantidhara): each has `when`, `title`, `text`, and `how` (how to actually sign up — currently points people to the Team page). Add/remove/hide the same way as any list here.
+- **`DAAN.disclaimer`** — the yellow caution line just above "Niyamit daan aur seva" (by default: confirm with a mandir karyakarta before paying, and check the account holder's name). Edit the Hindi/English text, or make both `""` to hide it.
+
+- **`window.RECURRING`** — the "Niyamit daan aur seva" cards (Masik Dravya Daan, Saptahik/Masik Shantidhara, ...). **You can add as many cards as you like, remove them, or hide them — no coding.** Each card is one block:
+  ```
+  {
+    title: { hi: "...", en: "..." },   // big heading of the card
+    when:  { hi: "हर महीने", en: "Every month" },   // small tag on top ("Every week", "Every Purnima", ...)
+    text:  { hi: "...", en: "..." },   // the main description
+    how:   { hi: "...", en: "..." }    // small grey line at the bottom (how to join / who to contact)
+  },
+  ```
+  - **Add a card:** copy one whole `{ ... },` block, paste it after the last card (make sure there is a comma between blocks), and change the text. New cards appear in the same order as in the file, three in a row on a computer; all cards in a row are the same height.
+  - **Remove a card:** delete its whole `{ ... },` block.
+  - **Hide a card for now:** add the line `hidden: true,` inside it; delete that line to show it again.
+  - **Spare cards:** the file already has three hidden spare cards named "Daan 1", "Daan 2", "Daan 3". To use one, delete its `hidden: true,` line and replace the Hindi/English text. Cards you don't use can stay hidden or be deleted.
 
 - **`window.PUNYARJAK`** — the Shantidhara punyarjak table: one row per name per date, `{ date, kind, name }` where `kind` is `"saptahik"` or `"masik"`. More than one person can share a date — just add one row per person. By default the table only shows the **current month** (`SITE.punyarjakCurrentMonthOnly: true`) so it doesn't turn into one long scroll of old names; set that to `false` if you'd rather every month stayed visible.
 
