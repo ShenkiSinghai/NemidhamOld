@@ -834,9 +834,9 @@
         '<div class="ss-wrap">' +
         '<button class="ss-nav ss-prev" type="button" aria-label="' + esc(t("lb.prev")) + '">&#8249;</button>' +
         '<div class="ss-track-outer"><div class="ss-track" id="ss-track">' +
-        pick.map(function (p) {
+        pick.map(function (p, i) {
           return '<a class="ss-card" href="gallery.html?type=photos&album=' + encodeURIComponent(p.albumId) + '">' +
-            '<img loading="lazy" alt="' + esc(L(p.caption) || L(p.albumTitle)) + '" src="' + esc(p.src) + '">' +
+            '<img decoding="async" ' + (i < 4 ? 'loading="eager"' : 'loading="lazy"') + ' alt="' + esc(L(p.caption) || L(p.albumTitle)) + '" src="' + esc(p.src) + '">' +
             '<span class="ss-cap">' + esc(L(p.albumTitle)) + "</span></a>";
         }).join("") +
         "</div></div>" +
