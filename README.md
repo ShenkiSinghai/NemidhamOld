@@ -1,151 +1,531 @@
-# Nemidham mandir website — content guide
+# नेमिधाम मंदिर वेबसाइट: बदलाव कैसे करें (आसान गाइड)
 
-Shri 1008 Neminath Digambar Jain Mandir, Nemidham. This file is about one thing only: **what's on the site, and how to change, add, remove or hide it.**
-
-**The one file you'll use almost every time: `js/data.js`.** Everything on the site — address, timings, announcements, karyakram, team, daan details, gallery, all of it — lives there, written in plain commented blocks. Open it on GitHub, click the pencil icon top-right, make your change, scroll down, hit "Commit changes." The live site has it within a minute or two. Nearly everything below is "go find this block in `data.js` and edit it."
-
-A few universal rules, true almost everywhere in this file:
-- **`hidden: true`** on any block hides it from the site without deleting it — the safest way to "remove" something you might want back later.
-- **`pinned: true`** on a yojana, a karyakram or an announcement puts it on the **Home page** as well (see "How to pin" just below). Without it, the item shows only on its own page.
-- Content is written as **`{ hi: "...", en: "..." }`** — fill both the Hindi and English versions when you add something new. Leaving one blank means that language shows nothing there.
-- To add a new entry in a list (a new yojana, karyakram, team member…), copy one whole existing block, paste it right below, and edit the copy. To remove one, delete its block entirely (or use `hidden: true` if you're not sure yet).
+यह फ़ाइल सिर्फ़ एक काम के लिए है: **वेबसाइट पर कुछ बदलना, जोड़ना, हटाना या छुपाना।**
+कोडिंग आना ज़रूरी नहीं है। बस नीचे लिखे स्टेप एक-एक करके करो।
 
 ---
 
-## Home page (`index.html`)
+## 1. सबसे पहले ये 3 बातें समझ लो
 
-Built automatically from other sections — there's nothing to edit specifically "on the home page." It pulls: today's timings (from `SITE.timings`), the **pinned** yojanayen, the **pinned** announcements, the next 3 **pinned** upcoming karyakram, and the photo slideshow.
+1. **वेबसाइट की लगभग सारी जानकारी एक ही फ़ाइल में है: `js/data.js`.** समय, सूचना, कार्यक्रम, योजना, टीम, दान की जानकारी, फ़ोटो, सब इसी में है।
+2. **इस फ़ाइल में हर चीज़ दो भाषाओं में लिखी होती है:** `hi` (हिंदी) और `en` (English). नई चीज़ जोड़ो तो दोनों भाषा भरो।
+   ```
+   title: { hi: "यहाँ हिंदी", en: "Here English" }
+   ```
+3. **तीन छोटे जादुई शब्द, जो बार-बार काम आएँगे:**
 
-### How to pin (what shows on Home)
+| शब्द | क्या करता है |
+|---|---|
+| `hidden: true,` | उस चीज़ को वेबसाइट से **छुपा देता है** (डिलीट नहीं करता)। बाद में यह लाइन हटाओ तो चीज़ वापस दिखने लगेगी। |
+| `pinned: true,` | उस चीज़ को **Home पेज पर भी** दिखाता है (योजना, कार्यक्रम, सूचना के लिए)। |
+| `pinned: false,` या यह लाइन हटा दो | Home से हट जाएगी, अपने पेज पर बनी रहेगी। |
 
-Yojanayen, karyakram and announcements work the same way: **only items with `pinned: true` appear on the Home page.** Everything else still appears on its own full page (Yojanayen / Karyakram / Announcements).
+---
 
-- **To pin:** open `js/data.js`, find the item's `{ ... }` block and add the line `pinned: true,` inside it (next to its other lines).
-- **To unpin:** change it to `pinned: false,` or delete that line. The item stays on its own page.
-- If *nothing* in a group is pinned, that whole section (heading and "see all" link too) is simply left out of the Home page. A karyakram that is pinned drops off Home by itself once its date has passed.
-- Right now all 5 yojanayen, the "Welcome" announcement and the 9 November karyakram are pinned. Unpin the ones you don't want on Home.
+## 2. बदलाव करने का तरीका (हर बार यही 7 स्टेप)
 
-## Announcements (`announcements.html`, highlights on Home)
+इसी तरीके से हर बदलाव होगा। आगे के सारे काम बस "कौन सा हिस्सा बदलना है" बताते हैं।
 
-`window.ANNOUNCEMENTS` — an array of `{ date, pinned, title, text }`. Every announcement (pinned or not) always shows on the full **Announcements** page (in the menu under Karyakram). Only the **pinned** ones show on Home, so Home doesn't fill up with routine notices — set `pinned: true` on whichever one or two you want visitors to see right away. If nothing is pinned, the announcements section is left out of Home. `date` is optional. Add a new announcement by copying a block; remove by deleting it, or `hidden: true` to park it (hidden from both places).
+1. **GitHub खोलो** और अपने खाते (account) में login करो। अपना रिपॉज़िटरी (`Nemidham`) खोलो।
+2. फ़ोल्डर **`js`** पर क्लिक करो, फिर फ़ाइल **`data.js`** पर क्लिक करो।
+3. ऊपर दाईं तरफ़ **✏️ (पेंसिल का निशान)** दबाओ। फ़ाइल बदलने के लिए खुल जाएगी।
+4. **Ctrl + F** दबाकर वो शब्द ढूँढो जो नीचे बताया है (जैसे `window.EVENTS`). वहाँ पहुँचकर बदलाव करो। (कौन सा नाम कहाँ मिलेगा, यह भाग 2क के नक्शे में है।)
+5. **नियम याद रखो:**
+   - लिखा हुआ टेक्स्ट हमेशा **"दोहरे quote"** के अंदर रहे।
+   - हर चीज़ के आख़िर में **कॉमा ( , )** रहे।
+   - कुछ भी जोड़ो तो पूरा `{ ... },` वाला डिब्बा कॉपी करके जोड़ो, आधा नहीं।
+6. ऊपर दाईं तरफ़ हरा बटन **"Commit changes..."** दबाओ, फिर दोबारा **"Commit changes"** दबाओ।
+7. **1-2 मिनट रुको**, फिर वेबसाइट खोलकर **Ctrl + Shift + R** दबाओ (मोबाइल पर browser का cache साफ़ करो)। बदलाव दिख जाएगा।
 
-## Karyakram (`karyakram.html`)
+> **कुछ बिगड़ जाए तो घबराओ मत:** भाग 6 ("अगर कुछ गड़बड़ दिखे") और भाग 7 ("पिछला वर्शन वापस कैसे लाएँ") पढ़ लो।
 
-`window.EVENTS` — each one is `{ date, endDate, time, place, title, type, text, pinned }` (`pinned: true` also shows an upcoming karyakram on Home — see "How to pin"). `endDate` is only needed for multi-day events. New karyakram: copy a block, change date/time/title. Old ones don't need manual cleanup — anything more than 30 days past its date quietly drops off the "past" tab by itself (change `SITE.karyakramPastDays` in `data.js` for a longer or shorter window; `-1` keeps them all). To remove one immediately: `hidden: true`, or delete the block.
+---
 
-## Jain Calendar (`calendar.html`)
+## 2क. `data.js` में कौन सी चीज़ कहाँ मिलेगी (नक्शा)
 
-`window.CALENDAR` — same shape as karyakram (`date`, `type`, `title`, `note`), for kalyanak/parv entries. Same add/remove/hide rules.
+इस गाइड में जहाँ भी `window.GALLERY` जैसा नाम लिखा है, वह `data.js` फ़ाइल के अंदर एक **हिस्से का नाम** है। हर हिस्सा फ़ाइल में ऐसे शुरू होता है: `window.नाम = ...`
 
-## Yojanayein (`yojana.html`)
+**उसे ढूँढने का तरीका (बहुत आसान):**
+1. GitHub में `js/data.js` खोलो और पेंसिल ✏️ दबाओ (भाग 2).
+2. फ़ाइल के अंदर कहीं एक बार क्लिक करो, फिर **Ctrl + F** दबाओ। (मोबाइल पर browser के मेन्यू में "Find in page" चुनो।)
+3. खोज के डिब्बे में वह नाम लिखो, जैसे `window.GALLERY`, और Enter दबाओ। आप सीधे उसी हिस्से पर पहुँच जाओगे।
+4. अगर नाम नहीं मिले तो ध्यान दो कि अक्षर बड़े (CAPITAL) हैं और बीच में कोई space नहीं है।
 
-`window.YOJANA` — each entry: `title`, `short` (one-line, used on Home), `status` (`"active"`, `"soon"`, etc. — controls the little pill label), `details` (a list of bullet points), `summary` (longer text for the Yojanayen page), `target` / `raised` (optional amounts), and an optional `link: { href, text }` button. `pinned: true` also shows it on the Home page (see "How to pin"); `hidden: true` removes it everywhere.
+**पूरी फ़ाइल का नक्शा (ऊपर से नीचे इसी क्रम में):**
 
-## Gallery (`gallery.html`)
+| ढूँढने का नाम | यह क्या है | कौन से पेज पर दिखता है | इस गाइड का भाग |
+|---|---|---|---|
+| `window.LINKS` | WhatsApp, Facebook, Instagram, YouTube के लिंक | हर पेज का फुटर | 4.7 |
+| `window.SITE` | मंदिर का नाम, समय, पता, फ़ोन, नक्शा, लोगो, स्लाइडशो, विज़िटर गिनती और बाक़ी सेटिंग | पूरी वेबसाइट | 4.5, 4.6, 4.14, 4.16 से 4.19, 4.24, 4.26 |
+| `window.BANNER` | ऊपर की सोने जैसी पट्टी | हर पेज के सबसे ऊपर | 4.8 |
+| `window.YOJANA` | योजनाएँ | Home और योजना पेज | 4.3 |
+| `window.ANNOUNCEMENTS` | सूचनाएँ | Home और सूचनाएँ पेज | 4.1 |
+| `window.EVENTS` | कार्यक्रम | Home और कार्यक्रम पेज | 4.2 |
+| `window.CALENDAR` | जैन कैलेंडर | कैलेंडर पेज | 4.23 |
+| `window.GALLERY` | फ़ोटो और वीडियो एलबम (`photos` और `videos` दो हिस्से) | गैलरी पेज, Home की फ़ोटो पट्टी | 4.13 |
+| `window.TEAM` | ट्रस्टी, कार्यकारिणी, पुजारी | टीम पेज | 4.9 |
+| `window.ABOUT` | हमारे बारे में | हमारे बारे में पेज | 4.15 |
+| `window.HOWTO` | कैसे पहुँचें (सड़क, रेल, हवाई मार्ग) | कैसे पहुँचें पेज | 4.15 |
+| `window.DAAN` | UPI, QR, बैंक, "मंदिर कार्यालय", सावधानी वाली लाइन | दान पेज | 4.10, 4.25 |
+| `window.RECURRING` | "नियमित दान और सेवा" के कार्ड | दान पेज | 4.11 |
+| `window.PUNYARJAK` | शांतिधारा पुण्यार्जक तालिका | दान पेज | 4.12 |
+| `window.TRUST` | ट्रस्ट / 80G की जानकारी | दान पेज | 4.12 |
+| `window.DRAVYA` | द्रव्य दान करने वालों की तालिका | दान पेज | 4.12 |
 
-`window.GALLERY = { photos: [...], videos: [...] }`. Both are lists of "occasion albums" (Diwali, Vedi Pratishtha, etc.).
+**हर हिस्से के ठीक ऊपर `//` या `/* ... */` में अंग्रेज़ी/हिंदी में छोटी हिदायतें भी लिखी हैं।** पहले उन्हें पढ़ लेना, वे उसी हिस्से के लिए हैं।
 
-**Photo albums**, two ways to list the photos in one:
-- Name them yourself: `files: ["1.jpg", "2.jpg"]` inside the album, pointing at files you've uploaded to `images/gallery/<album-name>/`. Always works, no surprises.
-- Skip `files` and the site reads the folder on its own, picking up whatever's there (needs `SITE.github.user`/`repo` filled in, which they already are).
+### बाक़ी जगहें जिनका गाइड में ज़िक्र है
 
-Don't want to hand-write a new album block? Open `gallery-helper.html`, fill in the form, and paste the code it gives you into `GALLERY` in `data.js`.
+| क्या | कहाँ मिलेगा |
+|---|---|
+| **वेबसाइट खोलने का पता** | आपकी वेबसाइट का पता, जैसे `https://shenkisinghai.github.io/Nemidham/` (अगर अपना डोमेन लगा है तो वह पता)। |
+| **गैलरी सहायक (`gallery-helper.html`)** | वेबसाइट के पते के आख़िर में `gallery-helper.html` लगाओ, जैसे `https://shenkisinghai.github.io/Nemidham/gallery-helper.html`. यह मेन्यू में नहीं दिखता, सिर्फ़ सीधा पता डालने से खुलता है। |
+| **जाँच पेज (`check.html`)** | वैसे ही: `https://shenkisinghai.github.io/Nemidham/check.html` |
+| **फ़ोटो, QR, लोगो की फ़ोल्डर `images`** | GitHub रिपॉज़िटरी का पहला पेज → फ़ोल्डर `images`. उसके अंदर `gallery` (गैलरी की फ़ोटो), `team` (टीम की फ़ोटो), और सीधे `mandir-logo.png`, `upi-qr.png` वग़ैरह। |
+| **बटन और मेन्यू के शब्द** | रिपॉज़िटरी → फ़ोल्डर `js` → फ़ाइल `i18n.js` (ज़रूरत कम ही पड़ेगी)। |
+| **Commits (पुराने बदलाव, वापस लाना)** | रिपॉज़िटरी का पहला पेज → ऊपर दाईं तरफ़ **Commits** (घड़ी का निशान)। |
+| **GitHub में "Add file → Upload files"** | रिपॉज़िटरी (या किसी फ़ोल्डर) के पेज पर, हरे **Code** बटन के पास **Add file** बटन। |
+| **पेंसिल ✏️** | किसी भी फ़ाइल को खोलो, ऊपर दाईं तरफ़ पेंसिल का निशान। |
 
-**Video albums**: each item is `{ youtube: "the link", title: {...} }` — works for a single video, a playlist, or an entire channel link, and plays right on the page, no visitor ever leaves the site. For a small clip you've uploaded yourself instead of YouTube: `{ file: "clip.mp4", title: {...} }`.
+---
 
-**Removing or hiding**: `hidden: true` on any album or any single photo/video item.
+## 3. फ़ोटो या फ़ाइल कैसे डालें (अपलोड)
 
-### The Home page photo strip
+फ़ोटो, QR या लोगो जैसी फ़ाइलें `images` फ़ोल्डर में जाती हैं।
 
-A horizontally scrolling strip of photos near the top of Home, controlled by `SITE.slideshow`:
-- `enabled: false` turns the whole strip off.
-- `source: "all"` pulls from every visible photo album; set it to one album's id (e.g. `"vedi-pratishtha"`) to only ever show that album.
-- `shuffle: false` (the default) keeps the same order every time, so it doesn't look random to a returning visitor; set `true` if you'd rather it mix photos up differently on each visit.
-- `count` — how many photos go into the strip. `seconds` — how often it auto-scrolls. Visitors can also drag it or use the arrow buttons.
+1. GitHub में रिपॉज़िटरी खोलो और सही फ़ोल्डर में जाओ (जैसे `images` या `images/team`).
+2. ऊपर **Add file → Upload files** दबाओ।
+3. अपनी फ़ोटो खींचकर (drag) वहाँ छोड़ दो।
+4. नीचे **Commit changes** दबाओ।
+5. फ़ाइल का **नाम** याद रखो (जैसे `ramesh.jpg`). यही नाम `data.js` में लिखना है।
 
-Right now `images/gallery/vedi-pratishtha/` has 5 placeholder photos (`sample-1.jpg`–`sample-5.jpg`) just so the strip has something to show. To put your real photos in: upload them into that same folder, then in `data.js` find the `vedi-pratishtha` album and either swap the `sample-*.jpg` names in its `files: [...]` line for your real filenames, or delete that `files:` line entirely so the folder is read automatically. Delete the old sample files once you're done with them.
+> फ़ाइल का नाम छोटा रखो, अंग्रेज़ी अक्षरों में, बिना space के। जैसे `ramesh.jpg`. "Ramesh ji photo 1.jpg" मत रखो।
 
-## Team (`team.html`)
+### ⚠️ फ़ोटो हमेशा पहले छोटी (resize) करके ही डालो
 
-`window.TEAM` — a list of groups (Trustees, Working committee, Pujari…), each with a `group` name and a `members` list. Each member: `{ name, role, phone, photo }`. `phone` shown as a tap-to-call link; leave `""` to hide it. `photo` points at a file in `images/team/`; leave `""` and their initials show instead. Add a person by copying a member line inside the right group; add a whole new group by copying a `{ group: {...}, members: [...] }` block. `hidden: true` on a group (like Trustees currently) hides that whole group until you're ready to show it.
+मोबाइल या कैमरे की फ़ोटो 3-8 MB की होती है। इतनी बड़ी फ़ोटो डालने से:
+- GitHub पर upload में **error** आता है ("Commit failed", "file is too large" या error 400),
+- और वेबसाइट **धीमी** खुलती है, ख़ासकर मोबाइल पर।
 
-## About page (`about.html`)
+इसलिए **कोई भी फ़ोटो डालने से पहले उसे छोटी कर लो।** इसके लिए सबसे आसान free औज़ार है **BIRME** (`birme.net`). इसमें login या पैसे की ज़रूरत नहीं है, और एक साथ बहुत सारी फ़ोटो छोटी हो जाती हैं।
 
-`window.ABOUT` — a list of sections, each with an `id`, a `title`, `paragraphs` (as many as you like), and an optional `list` for bullet points (used for the "visiting etiquette" rules). Add a new section the same way as everywhere else: copy a block, give it a unique `id`, write your own title/paragraphs.
+**BIRME से फ़ोटो छोटी करने के स्टेप:**
+1. ब्राउज़र में `birme.net` खोलो।
+2. अपनी सारी फ़ोटो एक साथ खींचकर (drag) वहाँ छोड़ दो।
+3. **Width** वाले डिब्बे में `1600` लिखो (Height खाली या auto रहने दो)।
+4. Quality `75` से `80` के बीच रखो (format JPG).
+5. **Save as Zip** दबाओ। सारी छोटी फ़ोटो एक zip में आ जाएँगी।
+6. Zip को खोलो (unzip) और **अंदर की फ़ोटो** GitHub पर डालो।
 
-## How to reach (`visit.html`)
+इससे हर फ़ोटो लगभग 300-500 KB की रह जाती है और 50 फ़ोटो भी 15-25 MB में आ जाती हैं।
 
-`window.HOWTO` — a list of `{ title, text }` blocks (By road, By rail, By air, Parking…). The Parking block is currently `hidden: true`; remove that line whenever it's ready to show. Address, phone, the Google Map and the "open in Maps" link are all set separately in `SITE` (see Links & Map below).
+**GitHub पर डालते समय:**
+- एक बार में **15-20 फ़ोटो** ही डालो, फिर Commit करो, फिर अगली 15-20 डालो। सारी फ़ोटो उसी एक फ़ोल्डर में जाएँगी।
+- फ़ोटो के नाम `01.jpg`, `02.jpg` ... जैसे रखो (English, बिना space)।
+- एक फ़ाइल 25 MB से बड़ी न हो।
 
-## Daan (`daan.html`)
+> BIRME न खुले तो Windows में **PowerToys → "Resize pictures"** (फ़ोटो चुनकर right-click) भी वही काम करता है।
 
-Several pieces, all inside or near `window.DAAN`:
+---
 
-- **`DAAN.enabled` / `intro`** — the page's on/off switch and intro line.
-- **`upiId`** and **`qrImage`** — the UPI ID shown with a Copy button, and the path to the QR code picture (`images/upi-qr.png`).
-- **`bank`** — a list of `{ label, value, copy }` rows for the bank-transfer card; `copy: true` adds a Copy button to that row (used for account number and IFSC).
-- **`inPerson`** — the text for the "at the mandir" card.
-- Leave any of the three (`upiId`/`qrImage`, `bank`, `inPerson`) blank/empty and that whole card just doesn't show.
+## 4. रोज़ के काम: स्टेप-बाय-स्टेप
 
-- **`DAAN.disclaimer`** — the yellow caution line just above "Niyamit daan aur seva" (by default: confirm with a mandir karyakarta before paying, and check the account holder's name). Edit the Hindi/English text, or make both `""` to hide it.
+(हर काम में पहले भाग 2 के स्टेप 1 से 4 कर लो, और आख़िर में स्टेप 6-7.)
 
-- **`window.RECURRING`** — the "Niyamit daan aur seva" cards (Masik Dravya Daan, Saptahik/Masik Shantidhara, ...). **You can add as many cards as you like, remove them, or hide them — no coding.** Each card is one block:
-  ```
-  {
-    title: { hi: "...", en: "..." },   // big heading of the card
-    when:  { hi: "हर महीने", en: "Every month" },   // small tag on top ("Every week", "Every Purnima", ...)
-    text:  { hi: "...", en: "..." },   // the main description
-    how:   { hi: "...", en: "..." }    // small grey line at the bottom (how to join / who to contact)
-  },
-  ```
-  - **Add a card:** copy one whole `{ ... },` block, paste it after the last card (make sure there is a comma between blocks), and change the text. New cards appear in the same order as in the file, three in a row on a computer; all cards in a row are the same height.
-  - **Remove a card:** delete its whole `{ ... },` block.
-  - **Hide a card for now:** add the line `hidden: true,` inside it; delete that line to show it again.
-  - **Spare cards:** the file already has three hidden spare cards named "Daan 1", "Daan 2", "Daan 3". To use one, delete its `hidden: true,` line and replace the Hindi/English text. Cards you don't use can stay hidden or be deleted.
+### 4.1 नई सूचना (Announcement) डालना
 
-- **`window.PUNYARJAK`** — the Shantidhara punyarjak table: one row per name per date, `{ date, kind, name }` where `kind` is `"saptahik"` or `"masik"`. More than one person can share a date — just add one row per person. By default the table only shows the **current month** (`SITE.punyarjakCurrentMonthOnly: true`) so it doesn't turn into one long scroll of old names; set that to `false` if you'd rather every month stayed visible.
+1. `data.js` में **Ctrl + F** करके ढूँढो: `window.ANNOUNCEMENTS`
+2. वहाँ पहले से एक-दो डिब्बे दिखेंगे, ऐसे:
+   ```
+   {
+     date: "2026-10-26", pinned: true,
+     title: { hi: "...", en: "..." },
+     text:  { hi: "...", en: "..." }
+   },
+   ```
+3. **पूरा एक डिब्बा** (`{` से `},` तक) कॉपी करो और उसी के ठीक नीचे पेस्ट कर दो।
+4. नई कॉपी में `date`, `title` और `text` बदल दो (हिंदी और English दोनों)।
+5. Home पर दिखाना है तो `pinned: true` रखो। सिर्फ़ Announcements पेज पर दिखाना है तो `pinned: false` कर दो।
+6. Commit करो।
 
-- **`window.DRAVYA`** — the Masik Dravya Daan donor table, same idea: `{ date, name }` rows. Empty list, and the table simply doesn't appear.
+**हटाना है?** उस डिब्बे को पूरा मिटा दो, या उसमें `hidden: true,` जोड़ दो।
 
-- **`window.TRUST`** — the trust/80G details card. `enabled: false` hides the whole section. Each `items` row with a blank `value` just doesn't show (so it's fine to leave most of these blank until you actually have the registration numbers).
+### 4.2 नया कार्यक्रम (Karyakram) डालना
 
-## Links, map, top banner, logo
+1. ढूँढो: `window.EVENTS`
+2. नीचे एक डिब्बा `hidden: true` वाला मिलेगा, जिसमें "SAMPLE" लिखा है। यह तैयार साँचा (template) है।
+3. **तरीका A (आसान):** उस डिब्बे से `hidden: true,` वाली लाइन हटाओ और उसका text बदल दो।
+4. **तरीका B:** किसी भी डिब्बे को कॉपी करके नीचे पेस्ट करो और बदल दो।
+5. इन चीज़ों को बदलो:
 
-- **`window.LINKS`** — WhatsApp group, Facebook, Instagram, YouTube. The social icons in the footer always show, even for ones left blank — they just sit greyed out until a real link is added.
-- **`SITE.mapEmbed`** — paste Google Maps' own "Share → Embed a map" code here (just the `src="..."` part). **`SITE.mapLink`** is the plain "open in Google Maps" link for the directions button. **`SITE.phone`** is the contact number shown around the site.
-- **`window.BANNER`** — the thin gold strip across the very top of every page. Leave its text blank to hide the strip entirely.
-- **`SITE.logo`** — points at `images/mandir-logo.png`, used in the header and the browser tab icon. Swap the image file (same name, or change the path here) to change it. The header shows the picture exactly as it is, with no cropping, so use a square image where the round badge (including its outer ring) fills the picture with only a thin margin and transparent corners (a PNG); a logo with a lot of empty space around it will look small. The browser-tab icons (`images/favicon-32.png`, `images/apple-touch-icon.png`, `images/icon-512.png`) are separate files — replace those too if the logo changes.
-- **`SITE.name`** / **`SITE.place`** — the mandir's name as it appears in the header and throughout the site. If the name ever changes, also update the `<title>` line at the top of each `.html` file — those are separate from `data.js` on purpose (search engines and browser tabs read them directly).
+| लाइन | क्या लिखना है |
+|---|---|
+| `date: "2026-11-09"` | तारीख, इसी रूप में: साल-महीना-दिन |
+| `endDate` | सिर्फ़ तब, जब कार्यक्रम कई दिन चले |
+| `time` | समय, जैसे `{ hi: "सुबह 7:00", en: "7:00 AM" }` |
+| `place` | जगह |
+| `type` | किस्म (उत्सव, पूजा...) |
+| `title` | कार्यक्रम का नाम |
+| `text` | थोड़ी जानकारी |
 
-## Languages
+6. Home पर दिखाना है तो डिब्बे में `pinned: true,` लिख दो। (Home पर अगले 3 pinned आने वाले कार्यक्रम दिखते हैं।)
+7. Commit करो।
 
-Hindi opens first; there's an English toggle in the menu. Every piece of real content in `data.js` is the `{ hi: "...", en: "..." }` pair described above. Menu words, button labels and other fixed interface text (not content) live separately in `js/i18n.js`, in the same `hi`/`en` shape.
+पुराने कार्यक्रम अपने आप "पुराने" टैब में चले जाते हैं और 30 दिन बाद हट जाते हैं। (दिन बदलने हों तो `data.js` में `karyakramPastDays` की संख्या बदलो; `-1` लिखने पर कोई भी पुराना कार्यक्रम नहीं हटेगा।)
 
-## Light/dark mode and accessibility
+### 4.3 योजना (Yojana) जोड़ना, बदलना या Home पर दिखाना
 
-There's a small "sliders" shaped Appearance button in the header (next to the English/हिंदी button). It opens a little menu with:
-- **Theme** — Light or Dark. Opens in Light by default; whichever a visitor picks is remembered on their own device.
-- **Contrast** — Normal or Increase contrast, for visitors who want stronger borders and higher-contrast text (similar to the same setting on GitHub).
+1. ढूँढो: `window.YOJANA`
+2. हर योजना एक डिब्बा है। जोड़ना हो तो एक पूरा डिब्बा कॉपी करके उसके नीचे पेस्ट करो।
+3. नए डिब्बे में **`id` ज़रूर बदलो** (हर योजना की id अलग होनी चाहिए, बिना space के, जैसे `"naya-kaam"`).
+4. इन चीज़ों को बदलो:
 
-Nothing to configure here — it's there for every visitor automatically.
+| लाइन | मतलब |
+|---|---|
+| `status: "active"` | `"active"` = प्रयास जारी है, `"soon"` = आगे आने वाली, `"done"` = पूरी हो गई |
+| `title` | योजना का नाम |
+| `short` | एक लाइन का छोटा विवरण (Home पर यही दिखता है) |
+| `summary` | पूरा विवरण (योजना पेज पर) |
+| `details` | बिंदुओं की सूची |
+| `target` / `raised` | लक्ष्य और जमा राशि, जैसे `"₹ 11,00,000"`. न दिखानी हो तो `""` |
+| `link` | एक बटन, जैसे टीम पेज का (वैकल्पिक) |
 
-## Visitor count and analytics
+5. **Home पर दिखाना:** डिब्बे में `pinned: true,` हो। **Home से हटाना:** वह लाइन मिटा दो या `pinned: false,` कर दो।
+6. **पूरी तरह छुपाना:** `hidden: true,` जोड़ दो।
 
-Two separate, unrelated numbers:
-- **`SITE.analyticsId`** — your Google Analytics ID. Private, detailed stats (where visitors come from, which pages, how long they stay) visible only to you at analytics.google.com.
-- **The number in the footer** — a public running total via GoatCounter. Sign up free at goatcounter.com, turn on "Allow adding visitor counts on your website" in its settings, and put your site code into `SITE.goatcounter`. It's a genuine count of real visits, not a placeholder — on a brand-new site, a small number is exactly what you'd expect; it climbs as more people actually visit. It can take a few hours to reflect the latest visit, since GoatCounter caches the number.
+### 4.4 Home पर क्या दिखे, यह कैसे चुनें (Pin करना)
 
-## The small "Website by" credit
+Home पर तीन चीज़ें दिखती हैं और तीनों में `pinned: true` ही चुनता है कि क्या दिखे:
 
-Bottom-right of the footer. Change the name or link through `SITE.credit`, or set `credit: null` to remove it entirely.
+| Home का हिस्सा | कहाँ से आता है | दिखता कब है |
+|---|---|---|
+| योजनाएँ | `window.YOJANA` | जिसमें `pinned: true,` हो |
+| सूचनाएँ | `window.ANNOUNCEMENTS` | जिसमें `pinned: true,` हो |
+| कार्यक्रम | `window.EVENTS` | जिसमें `pinned: true,` हो और जो अभी आने वाला हो (अगले 3) |
 
-## The two helper/tool pages
+- **Pin करने के लिए:** उसके डिब्बे में `{` के ठीक नीचे नई लाइन `pinned: true,` लिख दो।
+- **Unpin करने के लिए:** वह लाइन मिटा दो।
+- अगर किसी हिस्से में कुछ भी pinned नहीं है, तो **वह पूरा हिस्सा Home से अपने आप ग़ायब** हो जाता है (उसका नाम और "सब देखें" भी)।
+- Pin न हो तो भी चीज़ अपने पेज (योजना / कार्यक्रम / सूचनाएँ) पर हमेशा दिखती है।
+- अभी सारी 5 योजनाएँ, Welcome वाली सूचना और 9 नवंबर का कार्यक्रम pinned हैं। जो न चाहिए, उनसे `pinned: true,` हटा दो।
 
-- **`check.html`** — open this whenever the site looks wrong, blank, or half-missing after an edit. It reads through `data.js` and tells you in plain words what's broken or still marked SAMPLE.
-- **`gallery-helper.html`** — fills in the punctuation-correct code for a new gallery album, so you can paste it into `data.js` without typing it by hand.
+### 4.5 मंदिर के समय (दर्शन, अभिषेक, आरती) बदलना
 
-Neither is in the site menu or searchable by visitors on purpose.
+1. ढूँढो: `timings:`
+2. यहाँ चार समय हैं। समय **24 घंटे वाले रूप** में लिखो: सुबह 6:30 = `"06:30"`, शाम 7:30 = `"19:30"`.
+   ```
+   timings: { open: "06:30", abhishek: "07:30", aarti: "19:30", close: "21:00" },
+   ```
+3. समय का नोट बदलना हो तो उसके नीचे `timingsNote` में बदलो।
+4. समय पूरे छुपाने हों तो `showTimings: true` को `showTimings: false` कर दो।
 
-## Before you actually publish
+### 4.6 पता, फ़ोन, ईमेल, नक्शा
 
-Go through `js/data.js` and replace everything still marked **SAMPLE** — team names, placeholder karyakram, and especially anything in the daan section. Get the bank/UPI details checked by the trustees before publishing; that's the one place where a typo actually costs someone money.
+सब `window.SITE` के अंदर हैं (Ctrl + F: `window.SITE`):
+
+| लाइन | क्या है |
+|---|---|
+| `addressLines` | पते की लाइनें (फुटर में दिखती हैं) |
+| `phone` | फ़ोन नंबर, जैसे `"+91 98765 43210"` |
+| `whatsapp` | चैट के लिए नंबर, सिर्फ़ अंक, देश कोड के साथ: `"919876543210"` |
+| `email` | ईमेल |
+| `mapLink` | "Google Maps में खोलें" बटन का लिंक |
+| `mapEmbed` | नक्शे वाला लिंक (Google Maps में Share → Embed a map, सिर्फ़ `src="..."` के अंदर वाला भाग) |
+
+### 4.7 सोशल लिंक (WhatsApp, Facebook, Instagram, YouTube)
+
+1. ढूँढो: `window.LINKS`
+2. हर लिंक को quote के बीच पेस्ट करो। जिसका लिंक अभी नहीं है, उसे `""` रहने दो। उसका आइकन धुँधला दिखेगा और दबेगा नहीं।
+
+### 4.8 ऊपर की सोने जैसी पट्टी (Banner)
+
+1. ढूँढो: `window.BANNER`
+2. `text` में संदेश बदलो। `link` में वह पेज, जहाँ दबाने पर जाना है।
+3. पट्टी हटानी हो तो `enabled: true` को `enabled: false` कर दो।
+
+### 4.9 टीम में नाम जोड़ना
+
+1. ढूँढो: `window.TEAM`
+2. समूह (जैसे कार्यकारिणी) के `members` में एक लाइन ऐसी होती है:
+   ```
+   { name: "नाम", role: { hi: "पद", en: "Role" }, phone: "", photo: "" },
+   ```
+3. उस लाइन को कॉपी करके उसके नीचे पेस्ट करो और नाम, पद, फ़ोन बदलो।
+4. **फ़ोन** डालोगे तो दबाने पर कॉल लग जाएगा। न दिखाना हो तो `""`.
+5. **फ़ोटो** के लिए पहले फ़ोटो `images/team` फ़ोल्डर में अपलोड करो (भाग 3), फिर `photo: "ramesh.jpg"` लिखो। फ़ोटो न हो तो नाम के अक्षर दिखेंगे।
+6. नया समूह चाहिए तो पूरा `{ group: ..., members: [...] },` डिब्बा कॉपी करो।
+7. ट्रस्टी वाला समूह अभी `hidden: true` से छुपा है। नाम तय होने पर वह लाइन हटा दो।
+
+### 4.10 दान की जानकारी बदलना (UPI, बैंक, QR)
+
+> ⚠️ **यहाँ बहुत ध्यान रखो।** एक अंक की गलती से किसी का पैसा ग़लत जगह जा सकता है। बदलाव के बाद ट्रस्टी से दोबारा जँचवा लो।
+
+1. ढूँढो: `window.DAAN`
+2. **UPI ID:** `upiId: "..."` में बदलो।
+3. **QR फ़ोटो:** नई QR फ़ोटो का नाम `upi-qr.png` रखकर `images` फ़ोल्डर में अपलोड करो (भाग 3)। पुरानी फ़ाइल की जगह नई आ जाएगी।
+4. **बैंक की जानकारी:** `bank:` में हर पंक्ति ऐसी है:
+   ```
+   { label: { hi: "बैंक", en: "Bank" }, value: "ICICI Bank" },
+   ```
+   सिर्फ़ `value: "..."` वाला हिस्सा बदलो। जिस पंक्ति में `copy: true` है, उसमें "Copy" बटन आएगा (खाता संख्या और IFSC में)।
+5. **"मंदिर कार्यालय में" वाला टेक्स्ट:** `inPerson` में बदलो।
+6. **सावधानी वाली पीली लाइन** ("भुगतान से पहले कार्यकर्ता से जाँच लें"): `disclaimer` में बदलो। हटाना हो तो हिंदी और English दोनों `""` कर दो।
+7. किसी कार्ड की जानकारी खाली छोड़ दो तो वह कार्ड अपने आप नहीं दिखेगा।
+
+### 4.11 "नियमित दान और सेवा" के कार्ड: जोड़ना, हटाना, छुपाना
+
+1. ढूँढो: `window.RECURRING`
+2. हर कार्ड ऐसा एक डिब्बा है:
+   ```
+   {
+     title: { hi: "...", en: "..." },   // कार्ड का बड़ा नाम
+     when:  { hi: "हर महीने", en: "Every month" },   // ऊपर का छोटा टैग
+     text:  { hi: "...", en: "..." },   // मुख्य विवरण
+     how:   { hi: "...", en: "..." }    // नीचे की छोटी लाइन (कैसे जुड़ें / किससे बात करें)
+   },
+   ```
+3. **नया कार्ड जोड़ना:** एक पूरा `{ ... },` डिब्बा कॉपी करो, आख़िरी कार्ड के बाद पेस्ट करो, और टेक्स्ट बदलो। कार्ड उसी क्रम में दिखते हैं जिस क्रम में फ़ाइल में हैं।
+4. **हटाना:** उस पूरे डिब्बे को मिटा दो।
+5. **कुछ दिन के लिए छुपाना:** डिब्बे में `hidden: true,` जोड़ दो। फिर से दिखाना हो तो वह लाइन मिटा दो।
+6. **तैयार खाली कार्ड:** फ़ाइल में पहले से 3 छुपे हुए कार्ड हैं: "दान 1", "दान 2", "दान 3". इस्तेमाल करने के लिए उसकी `hidden: true,` लाइन हटाओ और टेक्स्ट अपना लिख दो।
+
+### 4.12 शांतिधारा पुण्यार्जक और द्रव्य दान की तालिका
+
+- `window.PUNYARJAK`: हर नाम की एक पंक्ति: `{ date, kind, name }`. `kind` में `"saptahik"` या `"masik"` लिखो। एक तारीख पर कई नाम हों तो हर नाम की अलग पंक्ति जोड़ो।
+- पुण्यार्जक तालिका में अभी सिर्फ़ **चालू महीना** दिखता है। हर महीना दिखाना हो तो `punyarjakCurrentMonthOnly: true` को `false` कर दो।
+- `window.DRAVYA`: द्रव्य दान करने वालों की तालिका: `{ date, name }`. सूची खाली हो तो तालिका नहीं दिखती।
+- `window.TRUST`: ट्रस्ट / 80G की जानकारी। `enabled: false` करने पर पूरा हिस्सा हट जाता है। जिस पंक्ति की `value` खाली है, वह नहीं दिखती।
+
+### 4.13 गैलरी: नया फ़ोटो एलबम बनाना (पूरे स्टेप)
+
+एलबम मतलब एक मौक़े की सारी फ़ोटो एक साथ (जैसे "दिवाली 2026"). हर एलबम की अपनी एक फ़ोल्डर होती है।
+
+**स्टेप 1: फ़ोटो की फ़ोल्डर बनाकर फ़ोटो अपलोड करो**
+1. GitHub में रिपॉज़िटरी खोलो, फ़ोल्डर `images` में जाओ, फिर `gallery` में जाओ।
+2. **पहले नई फ़ोल्डर बनाओ:** ऊपर **Add file → Create new file** दबाओ। ऊपर नाम वाले डिब्बे में लिखो `diwali-2026/ruko.txt` (`/` लिखते ही GitHub फ़ोल्डर बना देता है)। नीचे **Commit changes** दबाओ। अब `diwali-2026` फ़ोल्डर बन गई।
+3. **पहले फ़ोटो छोटी करो** (ऊपर भाग 3 में BIRME के स्टेप हैं), वरना upload में error आएगा।
+4. उस नई फ़ोल्डर में जाओ, **Add file → Upload files** दबाओ और छोटी की हुई फ़ोटो खींचकर छोड़ दो। एक बार में 15-20 फ़ोटो ही डालो।
+5. फ़ोटो के नाम छोटे और English में रखो: `01.jpg`, `02.jpg`, `03.jpg` (बिना space)।
+6. Commit करो। (और फ़ोटो हों तो अगली 15-20 के साथ यही दोहराओ।)
+
+**स्टेप 2: एलबम का "कोड" बनवाओ (सहायक पेज से)**
+1. अपनी वेबसाइट के पते के आख़िर में `/gallery-helper.html` लगाकर खोलो।
+2. **Photo album** वाले हिस्से में भरो: एलबम का नाम (हिंदी और English), छोटा नाम (जैसे `diwali-2026`), तारीख, और फ़ोल्डर (`images/gallery/diwali-2026`).
+3. दो में से एक चुनो: **"Photo ke naam likhwana"** (हमेशा चलता है, फ़ोटो चुनो तो नाम अपने आप भर जाएँगे) या **"Folder ki saari photo site khud dikhaye"** (नाम लिखने की ज़रूरत नहीं)।
+4. **"Lines banayein"** बटन दबाओ। नीचे वाले डिब्बे में कोड बन जाएगा। उसे कॉपी कर लो।
+
+**स्टेप 3: कोड `data.js` में चिपकाओ**
+1. GitHub में `js/data.js` खोलो, पेंसिल दबाओ, Ctrl + F से ढूँढो: `window.GALLERY`
+2. उसके नीचे `photos: [` लिखा मिलेगा। उसके अंदर पहले एलबम `{ ... }` के बाद, **कॉमा** लगाकर, कॉपी किया हुआ कोड पेस्ट करो।
+3. Commit करो और 1-2 मिनट बाद Ctrl + Shift + R करके गैलरी देखो।
+
+**बिना सहायक पेज के (हाथ से):** `window.GALLERY` में किसी एलबम का पूरा `{ ... },` डिब्बा कॉपी करो, नीचे पेस्ट करो, और ये बदलो:
+
+| लाइन | क्या बदलना है |
+|---|---|
+| `id` | एलबम का छोटा अलग नाम, बिना space, जैसे `"diwali-2026"` |
+| `date` | तारीख: साल-महीना-दिन |
+| `title` | एलबम का नाम, हिंदी और English |
+| `folder` | `"images/gallery/diwali-2026"` |
+| `files` | फ़ोटो के नाम: `["1.jpg", "2.jpg"]`. यह लाइन पूरी हटा दो तो साइट फ़ोल्डर की सारी फ़ोटो खुद दिखा देगी |
+| `cover` | (वैकल्पिक) एलबम के कार्ड पर दिखने वाली फ़ोटो, जैसे `cover: "images/gallery/diwali-2026/05.jpg",`. न लिखो तो फ़ोल्डर की **पहली फ़ोटो** अपने आप कवर बन जाती है |
+
+**कवर फ़ोटो और फ़ोटो की गिनती:** अगर एलबम में `files:` लाइन नहीं है (फ़ोल्डर अपने आप पढ़ा जाता है), तो एलबम का कार्ड खुलने पर साइट फ़ोल्डर देखकर फ़ोटो की गिनती ("50 फ़ोटो") और कवर (पहली फ़ोटो) अपने आप लगा देती है, इसमें 1 सेकंड लग सकता है। कोई ख़ास फ़ोटो कवर बनानी हो तो एलबम के डिब्बे में `cover: "images/gallery/<फ़ोल्डर>/<फ़ोटो का नाम>",` की एक लाइन जोड़ दो।
+
+**एलबम छुपाना या हटाना:** उसके डिब्बे में `hidden: true,` जोड़ो, या पूरा डिब्बा मिटा दो। किसी एक फ़ोटो को भी `hidden: true` से छुपा सकते हो।
+
+**वीडियो एलबम बनाना:** वही `gallery-helper.html` पेज खोलो, नीचे **Video album** वाले हिस्से में एलबम का नाम भरो और हर लाइन में एक YouTube लिंक डालो (चाहो तो लिंक के बाद `|` लगाकर नाम लिखो)। कोड बनाकर `data.js` में `window.GALLERY` के `videos: [` के अंदर पेस्ट करो। वीडियो साइट के अंदर ही चलता है। YouTube का अकेला वीडियो, playlist या चैनल का लिंक, तीनों चलते हैं।
+
+### 4.14 Home की फ़ोटो पट्टी (स्लाइडशो): कौन सी फ़ोटो और कितनी दिखें
+
+Home पर फ़ोटो की एक पट्टी अपने आप चलती रहती है। इसकी सेटिंग `window.SITE` में एक लाइन में है।
+
+**कैसे ढूँढें और बदलें:**
+1. `js/data.js` खोलो, पेंसिल ✏️ दबाओ (भाग 2).
+2. Ctrl + F से ढूँढो: `slideshow:`
+3. आपको ऐसी लाइन मिलेगी:
+   ```
+   slideshow: { enabled: true, source: "all", shuffle: false, count: 14, seconds: 4 },
+   ```
+4. नीचे की तालिका देखकर बदलो, Commit करो, 1-2 मिनट बाद Ctrl + Shift + R करके Home देखो।
+
+| शब्द | क्या करता है |
+|---|---|
+| `enabled: true` / `false` | पूरी पट्टी चालू / बंद |
+| `source: "all"` | सारे फ़ोटो एलबम की फ़ोटो |
+| `source: "Kshamavani-2026"` | **सिर्फ़ उस एक एलबम** की फ़ोटो। यहाँ एलबम की `id` लिखो (वही जो एलबम के डिब्बे में `id: "..."` में है), बड़े-छोटे अक्षर बिलकुल वैसे ही |
+| `shuffle: false` | हर बार एक ही क्रम में (फ़ोल्डर के क्रम में) |
+| `shuffle: true` | हर बार अलग क्रम, और जितनी फ़ोटो `count` में बताई उतनी सब फ़ोटो में से अलग-अलग चुनी जाती हैं |
+| `count: 14` | **कुल कितनी फ़ोटो** पट्टी में आएँगी। `shuffle: false` हो तो फ़ोल्डर की **पहली 14** |
+| `count: "all"` | **एलबम की जितनी भी फ़ोटो हैं, सारी** (50 हों तो 50, 8 हों तो 8). संख्या अपने आप गिन लेता है |
+| `seconds: 4` | हर कितने सेकंड में अपने आप आगे बढ़े |
+
+**उदाहरण 1: सिर्फ़ क्षमावाणी एलबम की, उसकी सारी फ़ोटो एक-एक करके:**
+```
+slideshow: { enabled: true, source: "Kshamavani-2026", shuffle: false, count: "all", seconds: 4 },
+```
+
+**उदाहरण 2: सारे एलबम से, हर बार अलग क्रम में 14 फ़ोटो:**
+```
+slideshow: { enabled: true, source: "all", shuffle: true, count: 14, seconds: 4 },
+```
+
+**ध्यान रखो:**
+- `"all"` में दोनों तरफ़ quote (`"`) ज़रूर लगाओ।
+- एलबम में फ़ोटो पहले अपलोड हो चुकी होनी चाहिए (भाग 4.13), नहीं तो पट्टी खाली रहेगी या Home से हट जाएगी।
+- फ़ोटो का क्रम फ़ोल्डर के क्रम में होता है। `1, 2, ... 10` का क्रम गड़बड़ न हो इसलिए नाम `01.jpg, 02.jpg ... 50.jpg` जैसे रखो।
+- 50 फ़ोटो के लिए `seconds: 3` रख सकते हो ताकि जल्दी घूमे। देखने वाला ख़ुद भी खींचकर या तीर वाले बटन से आगे-पीछे जा सकता है।
+- अभी `images/gallery/vedi-pratishtha/` में 5 नमूने की फ़ोटो (`sample-1.jpg` से `sample-5.jpg`) रखी हैं। असली फ़ोटो डालने के बाद `data.js` में उस एलबम की `files:` लाइन और ये sample फ़ोटो हटा दो।
+
+### 4.15 "हमारे बारे में" और "कैसे पहुँचें" का टेक्स्ट
+
+- `window.ABOUT`: हर हिस्से का एक डिब्बा है (`id`, `title`, `paragraphs`, और ज़रूरत हो तो `list`). नया हिस्सा जोड़ना है तो डिब्बा कॉपी करो और अलग `id` दो।
+- `window.HOWTO`: सड़क / रेल / हवाई मार्ग / पार्किंग जैसे डिब्बे: `{ title, text }`. पार्किंग वाला अभी `hidden: true` से छुपा है।
+
+### 4.16 लोगो बदलना
+
+1. नया लोगो वर्गाकार (square) PNG रखो, जिसमें गोल निशान पूरा भरा हो और कोने पारदर्शी हों।
+2. उसका नाम `mandir-logo.png` रखकर `images` फ़ोल्डर में अपलोड करो (भाग 3), पुरानी फ़ाइल की जगह आ जाएगी।
+3. ब्राउज़र टैब वाले छोटे आइकन अलग फ़ाइलें हैं: `favicon-32.png`, `apple-touch-icon.png`, `icon-512.png`. लोगो बदला है तो इन्हें भी बदलो।
+
+### 4.17 मंदिर का नाम बदलना
+
+- `window.SITE` में `name` और `place` बदलो।
+- हर `.html` फ़ाइल के ऊपर की `<title>` वाली लाइन भी बदलनी होगी (Google और ब्राउज़र टैब वही पढ़ते हैं)।
+
+### 4.18 फुटर का "वेबसाइट निर्माता" नाम
+
+`window.SITE` में `credit: { name: "...", url: "..." }` बदलो। हटाना हो तो `credit: null` लिख दो।
+
+### 4.19 विज़िटर की गिनती और आँकड़े
+
+- **फुटर में दिखने वाली संख्या** (सबको दिखती है): GoatCounter से आती है। `window.SITE` में `goatcounter: "nemidham"` लिखा है। संख्या नई वेबसाइट पर छोटी ही होगी और जैसे-जैसे लोग आएँगे, बढ़ेगी। कभी-कभी आख़िरी विज़िट दिखने में कुछ घंटे लग जाते हैं।
+- **निजी आँकड़े** (सिर्फ़ आपको): Google Analytics से। `analyticsId` में आपकी ID है, देखने के लिए analytics.google.com खोलो।
+
+### 4.20 भाषा, डार्क मोड और अलग-अलग बटन
+
+- वेबसाइट पहले **हिंदी** में खुलती है। मेन्यू में English का बटन है।
+- मेन्यू के पास **स्लाइडर वाला "Appearance" बटन** है। उसमें **Light/Dark** और **सामान्य/ज़्यादा contrast** चुना जा सकता है। इसके लिए आपको कुछ नहीं करना।
+- **बटन और मेन्यू के शब्द** (जैसे "सब देखें") `js/i18n.js` में हैं, `data.js` में नहीं। उन्हें बदलने की ज़रूरत शायद ही पड़ेगी।
+
+### 4.21 छुपाने / चालू करने (Hide / Enable) की पूरी सूची
+
+| क्या छुपाना या चालू करना है | कहाँ और कैसे |
+|---|---|
+| कोई भी एक सूचना, कार्यक्रम, योजना, कैलेंडर की तारीख़, गैलरी एलबम, टीम का समूह, "नियमित दान" का कार्ड, कैसे पहुँचें / हमारे बारे में का हिस्सा | उसके डिब्बे में `hidden: true,` लिखो। चालू करना हो तो वह लाइन मिटा दो। |
+| टीम का एक व्यक्ति | उसकी पूरी लाइन `{ name: ... },` मिटा दो (या कॉपी करके अलग रख लो)। |
+| ऊपर की सोने जैसी पट्टी | `window.BANNER` में `enabled: false` |
+| आज के समय का डिब्बा (दर्शन, आरती) | `window.SITE` में `showTimings: false` |
+| Home की फ़ोटो पट्टी | `window.SITE` में `slideshow: { enabled: false, ... }` |
+| पूरा दान पेज | `window.DAAN` में `enabled: false`. तब पेज पर सिर्फ़ "जानकारी जल्द आएगी" दिखेगा। |
+| UPI / बैंक / "मंदिर कार्यालय" का कार्ड | उसकी जानकारी खाली `""` छोड़ दो, कार्ड अपने आप नहीं दिखेगा। |
+| ट्रस्ट / 80G वाला हिस्सा | `window.TRUST` में `enabled: false` |
+| शांतिधारा या द्रव्य दान की तालिका | सूची खाली `[ ]` कर दो। |
+| Home पर कोई योजना / सूचना / कार्यक्रम | उसमें से `pinned: true,` हटा दो (वह अपने पेज पर बनी रहेगी)। |
+| फुटर का "वेबसाइट निर्माता" | `credit: null` |
+| विज़िटर की गिनती | `goatcounter: ""` |
+
+> **ध्यान दो:** ऊपर के मेन्यू से पूरा पेज (जैसे टीम या गैलरी) हटाना `data.js` से नहीं होता, क्योंकि मेन्यू डिज़ाइन वाली फ़ाइल में है। पेज की सारी चीज़ें `hidden: true` से छुपा दो तो पेज खाली दिखेगा। पूरा पेज मेन्यू से हटवाना हो तो किसी जानकार से कहो।
+
+### 4.22 नया हिस्सा (Section) जोड़ना या हटाना: सबका तरीका एक ही
+
+हर सूची में (सूचना, कार्यक्रम, योजना, टीम का समूह, "हमारे बारे में" का हिस्सा, कैसे पहुँचें का डिब्बा, नियमित दान का कार्ड, गैलरी एलबम) **नया जोड़ने का तरीका एक ही है:**
+
+1. `Ctrl + F` से उस सूची का नाम ढूँढो (जैसे `window.ABOUT`)।
+2. उसका **एक पूरा डिब्बा** चुनो: शुरू होता है `{` से और ख़त्म होता है `},` पर।
+3. कॉपी करके उसी के नीचे पेस्ट कर दो। दो डिब्बों के बीच **कॉमा ज़रूर** रहे।
+4. नए डिब्बे का टेक्स्ट बदलो (हिंदी और English)। जिस डिब्बे में `id` है, उसकी `id` नई और अलग रखो।
+5. **हटाने** के लिए: पूरा डिब्बा (`{` से `},` तक) मिटा दो, या सिर्फ़ छुपाना हो तो `hidden: true,` जोड़ो।
+
+ग़लती का सबसे आम कारण: कॉमा छूट जाना, quote (`"`) बंद न होना, या डिब्बे का आधा हिस्सा ही कॉपी होना। गड़बड़ लगे तो भाग 6 देखो।
+
+### 4.23 जैन कैलेंडर (पर्व, कल्याणक, तिथि) जोड़ना
+
+1. ढूँढो: `window.CALENDAR`
+2. हर तारीख़ एक डिब्बा है। एक डिब्बा कॉपी करके उसके नीचे पेस्ट करो और ये बदलो:
+
+| लाइन | क्या लिखना है |
+|---|---|
+| `date: "2026-11-08"` | तारीख: साल-महीना-दिन |
+| `type` | `"kalyanak"`, `"parv"`, `"tithi"` या `"other"` |
+| `title` | नाम (हिंदी और English) |
+| `note` | तिथि और मंदिर में क्या होगा, थोड़ा सा |
+
+3. तारीख़ें हमेशा किसी भरोसेमंद पंचांग/कैलेंडर से देखकर लिखो।
+4. अभी इसमें "SAMPLE" वाली तारीख़ें हैं। उन्हें असली से बदल दो या `hidden: true,` से छुपा दो।
+
+### 4.24 Home के ऊपर की लिखाई (मंदिर का नाम, एक लाइन का परिचय)
+
+- `window.SITE` में `name` (मंदिर का नाम), `place` (जगह, जैसे नेमिधाम) और `tagline` (Home पर नाम के नीचे की लाइन)। हिंदी और English दोनों बदलो।
+- **Home के ऊपर पीछे की बड़ी फ़ोटो** (वैकल्पिक): फ़ोटो `images` में अपलोड करो और `heroImage: "images/hero.jpg"` लिखो। नहीं चाहिए तो `""`.
+
+### 4.25 दान पेज की शुरुआती लाइन
+
+`window.DAAN` में `intro` (दान पेज के ऊपर का परिचय) और `note` (एक अतिरिक्त नोट; खाली `""` रखो तो नहीं दिखता)। दोनों हिंदी और English में बदलो।
+
+### 4.26 वीडियो, नक्शा और GitHub वाली बाक़ी सेटिंग (`window.SITE` में)
+
+| लाइन | क्या करती है |
+|---|---|
+| `youtubeChannelId` | (वैकल्पिक) आपके YouTube चैनल की ID (`UC` से शुरू होती है)। भरने पर चैनल के सारे वीडियो गैलरी में चलते हैं और नए वीडियो अपने आप जुड़ जाते हैं। ID YouTube Studio → Settings → Channel → Advanced में मिलती है। |
+| `mapQuery` | (वैकल्पिक) जगह का नाम या coordinates। `mapEmbed` और `mapLink` पहले से भरे हैं, इसे छोड़ सकते हो। |
+| `github: { user, repo }` | आपका GitHub नाम और रिपॉज़िटरी का नाम। गैलरी में "फ़ोल्डर की फ़ोटो अपने आप" दिखाने के लिए ज़रूरी है। **इसे बदलना मत**, जब तक रिपॉज़िटरी का नाम न बदला हो। |
+| `timezone` | समय क्षेत्र। भारत के लिए `"Asia/Kolkata"` ही रहने दो। |
+
+---
+
+## 5. हर HTML पेज में क्या है (एक लाइन में)
+
+| पेज (फ़ाइल) | इसमें क्या है |
+|---|---|
+| `index.html` | **Home पेज**: मंदिर का नाम, आज का समय, pinned योजनाएँ, pinned सूचनाएँ, pinned कार्यक्रम, फ़ोटो पट्टी, दान और कैसे पहुँचें के कार्ड। |
+| `yojana.html` | **योजनाएँ**: मंदिर की सभी योजनाएँ (भूमि दान, संत शाला आदि) पूरे विवरण के साथ। |
+| `announcements.html` | **सूचनाएँ**: सारी सूचनाएँ, नई से पुरानी। |
+| `karyakram.html` | **कार्यक्रम**: आने वाले कार्यक्रम और पुराने कार्यक्रम (टैब में)। |
+| `calendar.html` | **जैन कैलेंडर**: कल्याणक, पर्व और तिथियाँ। |
+| `gallery.html` | **गैलरी**: फ़ोटो एलबम और वीडियो। |
+| `daan.html` | **दान**: UPI, QR, बैंक की जानकारी, नियमित दान और सेवा, पुण्यार्जक तालिका, ट्रस्ट की जानकारी। |
+| `team.html` | **टीम**: ट्रस्टी, कार्यकारिणी, पुजारी, उनके नाम और फ़ोन। |
+| `about.html` | **हमारे बारे में**: मंदिर का परिचय और दर्शन के नियम। |
+| `visit.html` | **कैसे पहुँचें**: पता, नक्शा, रास्ते की जानकारी और संपर्क। |
+| `contact.html` | सिर्फ़ रास्ता: खुलते ही अपने आप `visit.html` पर भेज देता है। इसे बदलने की ज़रूरत नहीं। |
+| `404.html` | "पेज नहीं मिला" वाला पेज, जब कोई ग़लत पता खोले। |
+| `check.html` | **जाँच का पेज** (सिर्फ़ आपके लिए, मेन्यू में नहीं): बताता है कि `data.js` में कहाँ गड़बड़ है या कहाँ अभी SAMPLE लिखा है। |
+| `gallery-helper.html` | **एलबम बनाने का सहायक** (सिर्फ़ आपके लिए, मेन्यू में नहीं): गैलरी एलबम का तैयार टुकड़ा बना देता है। |
+
+**इन पेजों के टेक्स्ट बदलने के लिए `.html` फ़ाइलें खोलने की ज़रूरत नहीं।** सारा टेक्स्ट `data.js` में है।
+
+### बाक़ी फ़ाइलें, जिन्हें आपको छूना नहीं है (सिर्फ़ जानकारी के लिए)
+
+| फ़ाइल | क्या है |
+|---|---|
+| `js/data.js` | **वह फ़ाइल जिसे आप बदलते हो**: सारी जानकारी। |
+| `js/i18n.js` | बटन और मेन्यू के शब्द, हिंदी और English में। |
+| `js/main.js` | वेबसाइट को चलाने वाला हिस्सा (डिज़ाइन का काम)। इसे मत छेड़ो। |
+| `css/style.css` | रंग, आकार और डिज़ाइन। इसे भी मत छेड़ो। |
+| `images/` | सारी फ़ोटो: लोगो, QR, टीम की फ़ोटो, गैलरी। |
+
+---
+
+## 6. अगर कुछ गड़बड़ दिखे
+
+- **वेबसाइट खाली या आधी दिख रही है:** लगभग हमेशा `data.js` में कोई कॉमा `,` या quote `"` छूट गया होता है। अपनी वेबसाइट के पते के आख़िर में `/check.html` लगाकर खोलो। वह साफ़ भाषा में बता देगा कि क्या ग़लत है।
+- **बदलाव दिख नहीं रहा:** 2 मिनट रुको और **Ctrl + Shift + R** दबाओ।
+- **कुछ बिगड़ गया:** भाग 7 देखो।
+
+---
+
+## 7. पिछला वर्शन वापस कैसे लाएँ
+
+1. GitHub में अपने रिपॉज़िटरी का पेज खोलो।
+2. ऊपर **Commits** पर क्लिक करो (घड़ी जैसा निशान)।
+3. वहाँ हर बदलाव की सूची है: किसने, कब, क्या बदला।
+4. जिस बदलाव ने गड़बड़ की, उस पर क्लिक करो और **Revert** (वापस लो) वाला विकल्प चुनो। पुराना सही रूप लौट आएगा।
+
+---
+
+## 8. वेबसाइट छापने (public करने) से पहले
+
+1. `data.js` में **Ctrl + F** से शब्द **SAMPLE** ढूँढो। जहाँ-जहाँ मिले, असली जानकारी लिख दो, या वह डिब्बा `hidden: true` से छुपा दो।
+2. **दान वाली जानकारी** (UPI, बैंक, QR) ट्रस्ट से ज़रूर जँचवाओ। यही एक जगह है जहाँ छोटी सी ग़लती से किसी का पैसा ग़लत जगह जा सकता है।
+3. **फ़ोन नंबर और ईमेल** डाल दो।
