@@ -687,6 +687,30 @@
     var v = (a.items || []).length; return v ? t("g.videos", { n: v }) : "";
   }
   function thumbHtml(src) { return src ? '<img class="thumb" loading="lazy" alt="" src="' + esc(src) + '" onerror="this.removeAttribute(\'src\')">' : '<span class="thumb"></span>'; }
+  /* Albums that only name a folder (no files: line) have no cover or photo count in the data file.
+     Read the folder once (cached) and fill the cover picture and the count in afterwards. */
+  function fillAutoAlbums(list, host) {
+    list.forEach(function (a) {
+      if ((a.files && a.files.length) || !a.folder) return;
+      albumPhotos(a, function (err, photos) {
+        if (!photos || !photos.length) return;
+        var card = null, els = host.querySelectorAll("a.album[data-aid]");
+        for (var i = 0; i < els.length; i++) if (els[i].getAttribute("data-aid") === a.id) card = els[i];
+        if (!card) return;
+        var th = card.querySelector(".thumb");
+        if (th && th.tagName !== "IMG") {
+          var img = document.createElement("img");
+          img.className = "thumb"; img.alt = ""; img.loading = "lazy";
+          img.src = a.cover || photos[0].src;
+          th.parentNode.replaceChild(img, th);
+        }
+        var meta = card.querySelector(".meta");
+        if (meta) {
+          meta.textContent = [longDate(a.date), t("g.photos", { n: photos.length })].filter(Boolean).join(" · ");
+        }
+      });
+    });
+  }
   function setHead(title, lead) {
     var h1 = $(".page-head h1"), p = $(".page-head p");
     if (h1) h1.textContent = title;
@@ -719,6 +743,16 @@
           '<div class="info"><h3>' + esc(t("g." + kind + "_main")) + '</h3><p class="meta">' + esc(t("g." + kind + "_sub")) + " &middot; " + esc(t("g.n_albums", { n: list.length })) + "</p></div></a>";
       }
       host.innerHTML = '<div class="albums two">' + kindCard("photos", ph) + kindCard("videos", vd) + "</div>" + channelBlock();
+      var firstAuto = ph.filter(function (a) { return a.folder && !albumCover(a, "photos"); })[0];
+      if (firstAuto && !ph.some(function (a) { return albumCover(a, "photos"); })) {
+        albumPhotos(firstAuto, function (err, photos) {
+          var th = host.querySelector('a.kind[href$="photos"] .thumb');
+          if (!photos || !photos.length || !th || th.tagName === "IMG") return;
+          var img = document.createElement("img");
+          img.className = "thumb"; img.alt = ""; img.loading = "lazy"; img.src = firstAuto.cover || photos[0].src;
+          th.parentNode.replaceChild(img, th);
+        });
+      }
       return;
     }
 
@@ -731,10 +765,11 @@
       host.innerHTML = '<a class="back" href="gallery.html">' + esc(t("g.back_gallery")) + "</a>" + (list.length
         ? '<div class="albums">' + list.map(function (a) {
           var meta = [longDate(a.date), countText(a, type)].filter(Boolean).join(" · ");
-          return '<a class="album" href="gallery.html?type=' + type + "&album=" + encodeURIComponent(a.id) + '">' + thumbHtml(albumCover(a, type)) +
+          return '<a class="album" data-aid="' + esc(a.id) + '" href="gallery.html?type=' + type + "&album=" + encodeURIComponent(a.id) + '">' + thumbHtml(albumCover(a, type)) +
             '<div class="info"><h3>' + esc(L(a.title)) + '</h3><p class="meta">' + esc(meta) + "</p></div></a>";
         }).join("") + "</div>"
         : '<p class="empty">' + esc(t(type === "photos" ? "empty.albums" : "g.none_videos")) + "</p>") + (type === "videos" ? channelBlock() : "");
+      if (type === "photos") fillAutoAlbums(list, host);
       return;
     }
 
