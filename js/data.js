@@ -92,7 +92,7 @@ window.SITE = {
   //             Set true if you'd rather it mix the photos up differently on every visit.
   //   count     how many photos to pull into the strip.
   //   seconds   how many seconds between each automatic scroll.
-  slideshow: { enabled: true, source: "all", shuffle: false, count: 14, seconds: 4 },
+  slideshow: { enabled: true, source: "Kshamavani-2026", shuffle: false, count: "all", seconds: 3 },
 
   // Shantidhara punyarjak table (Daan page): true shows only the current month's names.
   // Set to false if you want last/next month's names to stay visible too.
