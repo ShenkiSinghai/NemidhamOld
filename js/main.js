@@ -51,6 +51,12 @@
     });
   }
   function put(id, html) { var el = document.getElementById(id); if (el) el.innerHTML = html; return el; }
+  /* A Home-page block that shows only PINNED items: when there is nothing to show, the whole
+     section (heading and "see all" link too) is left out instead of showing an empty box. */
+  function putHome(id, html) {
+    var el = put(id, html), sec = el && el.closest ? el.closest("section") : null;
+    if (sec) sec.hidden = !html;
+  }
   function pad2(n) { return (n < 10 ? "0" : "") + n; }
 
   function todayISO() {
@@ -353,10 +359,9 @@
     put("site-footer",
       '<footer class="site"><div class="wrap"><div class="foot-grid">' +
       '<div><p class="foot-name">' + esc(L(S.name)) + "</p><p class=\"foot-addr\">" + addr + "</p></div>" +
-      '<div><ul class="foot-links">' + links + "</ul></div></div>" +
+      '<div class="foot-right"><ul class="foot-links">' + links + '</ul><span class="foot-follow"><span class="foot-follow-h">' + esc(t("v.follow")) + '</span><span class="foot-social">' + socialIconsHtml("ficon") + "</span></span></div></div>" +
       '<div class="foot-bottom"><p class="legal">' + esc(t("f.legal", { year: new Date().getFullYear(), name: L(S.name), place: L(S.place) })) + "</p>" +
-      '<div class="foot-meta"><span class="foot-follow"><span class="foot-follow-h">' + esc(t("v.follow")) + '</span><span class="foot-social">' + socialIconsHtml("ficon") + "</span></span>" +
-      '<div class="foot-sub">' + counterHtml() + cred + "</div></div></div></div></footer>");
+      '<div class="foot-meta"><div class="foot-sub">' + counterHtml() + cred + "</div></div></div></div></footer>");
     fetchVisitorCount();
   }
 
@@ -423,14 +428,11 @@
     return '<article class="notice' + (a.pinned ? " pinned" : "") + '"><h3>' + esc(L(a.title)) + '</h3>' + (a.date ? '<p class="when">' + esc(longDate(a.date)) + "</p>" : "") + "<p>" + esc(L(a.text)) + "</p></article>";
   }
   /* Home shows only the pinned ("highlighted") announcements, so day-to-day notices don't
-     clutter the home page — everything (pinned or not) is always on the full Announcements
-     page. If nothing is pinned, the Home section says so (and still links to "all"). */
+     clutter the home page. Everything (pinned or not) is always on the full Announcements page.
+     If nothing is pinned, the announcements section is left out of Home. */
   function renderAnnouncements() {
-    var all = sortedAnnouncements();
-    var pinned = all.filter(function (a) { return a.pinned; });
-    var list = pinned;
-    if (!list.length) { put("announcements", '<p class="empty">' + esc(t("empty.notices")) + "</p>"); return; }
-    put("announcements", '<div class="notices">' + list.map(noticeCard).join("") + "</div>");
+    var list = sortedAnnouncements().filter(function (a) { return a.pinned; });
+    putHome("announcements", list.length ? '<div class="notices">' + list.map(noticeCard).join("") + "</div>" : "");
   }
   function renderAnnouncementsPage() {
     var host = document.getElementById("announcements-list"); if (!host) return;
@@ -465,8 +467,8 @@
       (later.length ? '<section><h2>' + esc(t("y.later")) + '</h2><div class="ylist">' + later.map(function (y) { return yojanaCard(y); }).join("") + "</div></section>" : "");
   }
   function renderHomeYojana() {
-    var all = vis(window.YOJANA).filter(function (y) { return y.home !== false; });
-    put("home-yojana", all.length ? '<div class="cards three">' + all.map(function (y) { return yojanaCard(y, true); }).join("") + "</div>" : "");
+    var all = vis(window.YOJANA).filter(function (y) { return y.pinned; });
+    putHome("home-yojana", all.length ? '<div class="cards three">' + all.map(function (y) { return yojanaCard(y, true); }).join("") + "</div>" : "");
   }
 
   /* ---------- karyakram + calendar ---------- */
@@ -498,9 +500,9 @@
     show("upcoming");
   }
   function renderHomeEvents() {
-    var evs = vis(window.EVENTS).filter(function (e) { return e.home !== false; });
+    var evs = vis(window.EVENTS).filter(function (e) { return e.pinned; });
     var up = splitByDate(evs, "endDate").up.slice(0, 3);
-    put("home-events", up.length ? '<div class="events">' + up.map(function (e) { return eventCard(e, false); }).join("") + "</div>" : '<p class="empty">' + esc(t("empty.events")) + "</p>");
+    putHome("home-events", up.length ? '<div class="events">' + up.map(function (e) { return eventCard(e, false); }).join("") + "</div>" : "");
   }
   /* Karyakram older than this many days quietly drop off the "past" list too, so it doesn't
      keep growing forever. Change the number if you'd rather keep them longer. */
@@ -866,6 +868,8 @@
     if (L(D.inPerson)) cards += '<div class="card"><h3>' + esc(t("d.person")) + "</h3><p>" + esc(L(D.inPerson)) + "</p></div>";
     html += '<section id="how"><h2>' + esc(t("d.how")) + '</h2><div class="cards three">' + cards + "</div>" +
       (L(D.note) ? '<p class="note">' + esc(L(D.note)) + "</p>" : "") + "</section>";
+
+    if (L(D.disclaimer)) html += '<p class="note disclaimer" role="note">' + esc(L(D.disclaimer)) + "</p>";
 
     var R = vis(window.RECURRING);
     if (R.length) {

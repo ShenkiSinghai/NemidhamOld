@@ -399,8 +399,11 @@ dialog.lightbox::backdrop { background: rgba(8, 14, 28, .92); }
 /* A row with a Copy button (UPI ID, account number, IFSC): label, code and the Copy button
    sit close together on the left instead of being stretched to opposite edges of the card,
    which looked like a big awkward gap on a short single-line card. */
-.coderow { align-items: center !important; justify-content: flex-start !important; gap: 14px; min-width: 0; flex-wrap: wrap !important; }
-.coderow dd { flex-wrap: nowrap; min-width: 0; justify-content: flex-start; flex: 0 1 auto; text-align: left; }
+.coderow { align-items: center !important; justify-content: space-between !important; gap: 6px 14px; min-width: 0; flex-wrap: wrap !important; }
+.coderow dd { flex-wrap: nowrap; min-width: 0; justify-content: flex-end; flex: 1 1 auto; text-align: right; }
+/* The UPI card has just one such row, under the QR picture: keep it on the left there. */
+.card-upi .coderow { justify-content: flex-start !important; }
+.card-upi .coderow dd { flex: 0 1 auto; justify-content: flex-start; text-align: left; }
 .coderow code { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: .8rem; white-space: nowrap; overflow-x: auto; min-width: 0; flex: 1 1 auto; scrollbar-width: none; }
 .coderow code::-webkit-scrollbar { display: none; }
 .copy { flex: none; white-space: nowrap; background: var(--mist); border: 0; border-radius: 999px; padding: 4px 10px; font-size: .82rem; cursor: pointer; color: var(--ink-2); font-family: var(--sans); font-weight: 600; }
@@ -446,8 +449,11 @@ html[lang="hi"] .btn { line-height: 1.5; }
 .ylist { display: grid; gap: 18px; }
 @media (min-width: 800px) { .ylist { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 1fr; } }
 .yojana { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 4px; }
-.yojana .yhead { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.yojana h3 { margin: 0; font-size: 1.2rem; }
+.yojana .yhead { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: nowrap; }
+/* The status tag ("Prayas jari hai") always stays at the right of the title; a long title wraps
+   onto a second line instead of pushing the tag down, so every card is laid out the same way. */
+.yojana h3 { margin: 0; font-size: 1.2rem; min-width: 0; flex: 1 1 auto; }
+.yojana .yhead .chip { flex: none; margin-top: 2px; }
 .yojana h3 a { text-decoration: none; color: var(--ink-text); }
 .yojana h3 a:hover { color: var(--gold-ink); }
 .yojana p { margin: .5em 0 .6em; }
@@ -536,6 +542,7 @@ footer.site a.ficon:hover, .ficon:hover { background: var(--gold-soft); color: v
 .foot-bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px; }
 /* Right side of the footer: "Follow us" + icons on the first line; below it the visitor count and the
    "Website by" credit, split by a thin divider. Both lines share the same right edge. */
+.foot-right { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
 .foot-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
 .foot-follow { display: flex; align-items: center; gap: 10px; }
 .foot-follow-h { margin: 0; font-size: .82rem; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: #9fabc2; }
@@ -545,7 +552,7 @@ footer.site a.ficon:hover, .ficon:hover { background: var(--gold-soft); color: v
 .foot-credit { font-size: .82rem; color: #9fabc2 !important; text-decoration: none; white-space: nowrap; }
 .foot-count + .foot-credit { margin-left: 14px; padding-left: 14px; border-left: 1px solid rgba(255, 255, 255, .28); }
 .foot-credit:hover { color: var(--gold-soft) !important; }
-@media (max-width: 680px) { .foot-meta { align-items: flex-start; } .foot-sub { justify-content: flex-start; } }
+@media (max-width: 680px) { .foot-meta, .foot-right { align-items: flex-start; } .foot-sub { justify-content: flex-start; } }
 @media (max-width: 560px) { .foot-bottom { flex-direction: column; align-items: flex-start; } }
 
 /* ---------- Shantidhara punyarjak: filter + month table ---------- */

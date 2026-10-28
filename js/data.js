@@ -129,13 +129,16 @@ window.BANNER = {
 // target / raised: optional, e.g. "₹ 11,00,000". Leave "" to hide.
 // details: a short list of points (optional).
 // link: optional button-like link inside the card, e.g. { href: "team.html", text: { hi: "...", en: "..." } }
-// home: false  keeps a yojana off the Home page (it still shows on the Yojanayen page).
+// pinned: true  shows the yojana on the Home page too. Yojanayen WITHOUT  pinned: true  show only on the Yojanayen page.
+//   (If no yojana is pinned, the yojana section is left out of the Home page completely.)
 // hidden: true  hides a yojana everywhere without deleting it.
 // To add a new yojana: copy one whole { ... }, block, paste it after the last one, and change the text and id.
-// To remove one: delete its whole { ... }, block, or set  home: false  (only Home) / hidden: true  (everywhere).
+// To remove one: delete its whole { ... }, block, or set  hidden: true  (everywhere).
+// To take one off the Home page only: change  pinned: true  to  pinned: false  (or delete that line).
 window.YOJANA = [
   {
     id: "bhumi-daan",
+    pinned: true,
     status: "active",
     title: { hi: "भूमि दान", en: "Bhumi Daan" },
     short: {
@@ -155,6 +158,7 @@ window.YOJANA = [
   },
   {
     id: "sant-shala",
+    pinned: true,
     status: "active",
     title: { hi: "संत शाला", en: "Sant Shala" },
     short: {
@@ -173,6 +177,7 @@ window.YOJANA = [
   },
   {
     id: "murti-mahavir",
+    pinned: true,
     status: "active",
     title: { hi: "भगवान महावीर स्वामी की नई प्रतिमा", en: "New Pratima of Bhagwan Mahavir Swami" },
     short: {
@@ -191,6 +196,7 @@ window.YOJANA = [
   },
   {
     id: "murti-munisuvratnath",
+    pinned: true,
     status: "active",
     title: { hi: "भगवान मुनिसुव्रतनाथ की नई प्रतिमा", en: "New Pratima of Bhagwan Munisuvratnath" },
     short: {
@@ -209,6 +215,7 @@ window.YOJANA = [
   },
   {
     id: "dharmshala",
+    pinned: true,
     status: "soon",
     title: { hi: "धर्मशाला और आवास", en: "Dharmshala and aavas" },
     short: {
@@ -251,9 +258,12 @@ window.ANNOUNCEMENTS = [
 // date: "YYYY-MM-DD". endDate is optional (for events of many days).
 // time can be plain text like "8:00 AM", or { hi: "सुबह 8:00", en: "8:00 AM" }.
 // Past events move to the "Past" tab by themselves.
+// pinned: true  shows an UPCOMING karyakram on the Home page too (the next 3 pinned ones). Karyakram without
+//   pinned: true  show only on the Karyakram page. If none is pinned, the karyakram section is left out of Home.
 // To remove a karyakram: delete its whole { ... }, block, or add  hidden: true,  inside it.
 window.EVENTS = [
   {
+    pinned: true,
     date: "2026-11-09", time: { hi: "सुबह 7:00", en: "7:00 AM" },
     place: { hi: "मंदिर जी", en: "Mandir ji" },
     type: { hi: "उत्सव", en: "Utsav" },
@@ -266,7 +276,7 @@ window.EVENTS = [
 
   // TEMPLATE for the next karyakram. It is hidden. To use it: remove the line  hidden: true,
   // and change the text. To add one more, copy the whole { ... }, block.
-  // home: false  keeps a karyakram off the Home page (it still shows on the Karyakram page).
+  // pinned: true  (add this line) puts it on the Home page too.
   // To take a karyakram off the website later: delete its { ... }, block, or add  hidden: true,
   {
     hidden: true,
@@ -507,10 +517,20 @@ window.DAAN = {
     hi: "आप मंदिर कार्यालय में खुलने के समय में भी दान दे सकते हैं। रसीद दी जाएगी।",
     en: "You can also give daan at the mandir office during opening hours. A receipt will be given."
   },
-  note: { hi: "", en: "" }
+  note: { hi: "", en: "" },
+  // A short caution shown on the Daan page just above "Niyamit daan aur seva". Leave both "" to hide it.
+  disclaimer: {
+    hi: "कृपया कोई भी भुगतान (पेमेंट) करने से पहले एक बार मंदिर के कार्यकर्ता से जानकारी जाँच लें, और भुगतान करते समय खाताधारक का नाम भी मिला लें।",
+    en: "Before making any payment, please confirm the details once with a mandir karyakarta, and check the account holder's name when you pay."
+  }
 };
 
-/* Regular daan and seva (every week / every month) */
+/* Regular daan and seva (every week / every month): one card each on the Daan page.
+   Each card: title, when (the small tag on top), text, how (small grey line at the bottom).
+   TO ADD a card: copy one whole { ... }, block, paste it after the last one, change the text.
+   TO REMOVE a card: delete its whole { ... }, block.   TO HIDE it for now: add  hidden: true,  inside it.
+   The last three cards ("Daan 1/2/3") are spare cards that are hidden. To use one: delete its  hidden: true,  line
+   and write your own text. Cards are shown in this order, three in a row on a computer screen. */
 window.RECURRING = [
   {
     title: { hi: "मासिक द्रव्य दान", en: "Masik Dravya Daan" },
@@ -547,6 +567,27 @@ window.RECURRING = [
       hi: "पुण्यार्जक बनने के लिए कृपया टीम पेज पर दिए गए सदस्यों से संपर्क करें।",
       en: "To become a punyarjak, please contact the members listed on the Team page."
     }
+  },
+  {
+    hidden: true,
+    title: { hi: "दान 1", en: "Daan 1" },
+    when: { hi: "हर महीने", en: "Every month" },
+    text: { hi: "यहाँ इस दान या सेवा की जानकारी लिखें।", en: "Write the details of this daan or seva here." },
+    how: { hi: "इसके लिए कृपया टीम पेज पर दिए गए सदस्यों से संपर्क करें।", en: "To join, please contact the members listed on the Team page." }
+  },
+  {
+    hidden: true,
+    title: { hi: "दान 2", en: "Daan 2" },
+    when: { hi: "हर महीने", en: "Every month" },
+    text: { hi: "यहाँ इस दान या सेवा की जानकारी लिखें।", en: "Write the details of this daan or seva here." },
+    how: { hi: "इसके लिए कृपया टीम पेज पर दिए गए सदस्यों से संपर्क करें।", en: "To join, please contact the members listed on the Team page." }
+  },
+  {
+    hidden: true,
+    title: { hi: "दान 3", en: "Daan 3" },
+    when: { hi: "हर महीने", en: "Every month" },
+    text: { hi: "यहाँ इस दान या सेवा की जानकारी लिखें।", en: "Write the details of this daan or seva here." },
+    how: { hi: "इसके लिए कृपया टीम पेज पर दिए गए सदस्यों से संपर्क करें।", en: "To join, please contact the members listed on the Team page." }
   }
 ];
 
