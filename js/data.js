@@ -455,8 +455,8 @@ window.ABOUT = [
     title: { hi: "दर्शन के नियम", en: "Visiting the mandir" },
     paragraphs: [
       {
-        hi: "आपका दर्शन के लिए स्वागत है। नीचे कुछ सामान्य नियम हैं। इन्हें अपने मंदिर के नियमों के अनुसार बदल लें।",
-        en: "We welcome you for darshan. These are the usual courtesies. Please change this list to match your mandir's own rules."
+        hi: "आपका दर्शन के लिए स्वागत है। नीचे कुछ सामान्य नियम हैं।",
+        en: "We welcome you for darshan. These are the usual courtesies."
       }
     ],
     list: [
