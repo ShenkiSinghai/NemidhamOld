@@ -343,6 +343,8 @@ slideshow: { enabled: true, source: "all", shuffle: false, count: 14, seconds: 4
 slideshow: { enabled: true, source: "Kshamavani-2026", shuffle: false, count: "all", seconds: 4 },
 ```
 
+**स्लाइडशो धीमा लगे तो:** सबसे बड़ा कारण भारी फ़ोटो हैं (भाग 4). स्लाइडशो में फ़ोटो छोटी ही दिखती है, इसलिए फ़ोटो BIRME में **Width `1000` से `1200`** पर छोटी करके डालो (हर फ़ोटो 150-300 KB). `count: "all"` के साथ 50 भारी फ़ोटो एक साथ जुड़ती हैं, तो `count` कम रखो (जैसे `14`) और `shuffle: true` कर दो।
+
 **ध्यान:** `"all"` में दोनों तरफ़ quote लगाओ। एलबम में फ़ोटो पहले अपलोड हो, वरना पट्टी खाली रहेगी या Home से हट जाएगी। अभी `images/gallery/vedi-pratishtha/` में 5 नमूने की फ़ोटो (`sample-1.jpg` से `sample-5.jpg`) रखी हैं। असली फ़ोटो डालने के बाद उस एलबम की `files:` लाइन और ये sample फ़ोटो हटा दो।
 
 ### 5.15 "हमारे बारे में" और "कैसे पहुँचें"
