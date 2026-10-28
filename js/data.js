@@ -344,10 +344,6 @@ window.GALLERY = {
       title: { hi: "क्षमावाणी 2026", en: "Kshamavani 2026" },
       description: { hi: "", en: "" },
       folder: "images/gallery/Kshamavani-2026",
-      // SAMPLE photos below, just so you can see the slideshow working. Delete this files
-      // line (and these 5 sample-*.jpg files from images/gallery/vedi-pratishtha/) once you
-      // upload your real photos, then the site will list your folder's photos by itself.
-      
     },
     {
       hidden: true,
