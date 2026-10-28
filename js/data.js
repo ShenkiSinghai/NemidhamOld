@@ -341,7 +341,7 @@ window.GALLERY = {
     },
      {
       id: "Kshamavani-2026", date: "2026-09-26",
-      title: { hi: "क्षमावाणीा 2026", en: "Kshamavani 2026" },
+      title: { hi: "क्षमावाणी 2026", en: "Kshamavani 2026" },
       description: { hi: "", en: "" },
       folder: "images/gallery/Kshamavani-2026",
       // SAMPLE photos below, just so you can see the slideshow working. Delete this files
