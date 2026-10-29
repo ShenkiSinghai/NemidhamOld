@@ -1139,22 +1139,26 @@
 
   /* ---------- suvidha (facilities of the mandir) + Home cards ---------- */
   function suvidhaCard(f) {
-    var c = ACT_COLORS[f.color] ? f.color : "orange";
+    /* same look as the daan / visit cards: plain card, h3 title, text, standard rows, small call buttons */
     var info = vis(f.info).filter(function (i) { return L(i.value); }).map(function (i) {
       return "<div><dt>" + (i.icon ? '<span aria-hidden="true">' + esc(i.icon) + "</span> " : "") + esc(L(i.label)) + "</dt><dd>" + esc(L(i.value)) + "</dd></div>";
     }).join("");
     var people = vis(f.contacts).filter(function (x) { return L(x.name) || x.phone; }).map(function (x) {
-      return '<li><span class="act-pn">' + esc(L(x.name)) + (L(x.role) ? "<small>" + esc(L(x.role)) + "</small>" : "") + "</span>" +
-        (x.phone ? '<a class="call-btn" href="' + telHref(x.phone) + '"><span aria-hidden="true">📞</span> ' + esc(x.phone) + "</a>" : "") + "</li>";
+      var nm = (L(x.name) ? esc(L(x.name)) + (L(x.role) ? " (" + esc(L(x.role)) + ")" : "") : "");
+      return x.phone
+        ? '<a class="call-btn call-sm" href="' + telHref(x.phone) + '"><span aria-hidden="true">📞</span> ' + (nm ? nm + " · " : "") + esc(x.phone) + "</a>"
+        : '<span class="tag">' + nm + "</span>";
     }).join("");
-    return '<section class="card act-sec su-card c-' + c + '"><h2>' + (f.icon ? '<span class="ic" aria-hidden="true">' + esc(f.icon) + "</span>" : "") + "<span>" + esc(L(f.title)) + "</span></h2>" +
-      actParas(f.paragraphs) + (info ? '<dl class="su-rows">' + info + "</dl>" : "") + actList(f.list) +
-      (L(f.contactNote) ? '<p class="su-note">' + esc(L(f.contactNote)) + "</p>" : "") + (people ? '<ul class="act-people">' + people + "</ul>" : "") + "</section>";
+    var paras = vis(f.paragraphs).map(function (p) { return L(p) ? "<p>" + esc(L(p)) + "</p>" : ""; }).join("");
+    var list = vis(f.list).filter(function (i) { return L(i); }).map(function (i) { return "<li>" + esc(L(i)) + "</li>"; }).join("");
+    return '<div class="card su-card"><h3>' + (f.icon ? esc(f.icon) + " " : "") + esc(L(f.title)) + "</h3>" + paras +
+      (info ? '<dl class="rows">' + info + "</dl>" : "") + (list ? '<ul class="su-list">' + list + "</ul>" : "") +
+      (L(f.contactNote) ? '<p class="fine su-note">' + esc(L(f.contactNote)) + "</p>" : "") + (people ? '<div class="r-contacts">' + people + "</div>" : "") + "</div>";
   }
   function renderSuvidha() {
     var host = document.getElementById("suvidha"); if (!host) return;
     var list = vis(window.SUVIDHA);
-    host.innerHTML = list.length ? '<div class="act-secs su-grid">' + list.map(suvidhaCard).join("") + "</div>" : '<p class="empty">' + esc(t("suvidha.none")) + "</p>";
+    host.innerHTML = list.length ? '<div class="cards three">' + list.map(suvidhaCard).join("") + "</div>" : '<p class="empty">' + esc(t("suvidha.none")) + "</p>";
   }
   function renderHomeSuvidha() {
     var grid = $(".home-cta"); if (!grid) return;
