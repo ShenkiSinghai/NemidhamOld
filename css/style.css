@@ -143,7 +143,7 @@ header.site { position: relative; z-index: 50; background: var(--header-bg); bac
 /* The header gets a little more room than the page content, so a long mandir name
    and the full menu can share one row without crowding each other. */
 header.site .wrap { max-width: calc(var(--wrap) + 200px); }
-.bar { display: flex; align-items: center; gap: 12px; min-height: 122px; padding: 10px 20px; }
+.bar { display: flex; align-items: center; gap: 10px; min-height: 122px; padding: 10px 20px; }
 @media (max-width: 480px) { .bar { min-height: 96px; } }
 .brand { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--ink-text); min-width: 0; }
 .mark { width: 102px; height: 102px; border-radius: 50%; background: var(--ink); color: var(--gold-soft); display: grid; place-items: center; font-family: var(--serif); font-size: 1.35rem; flex: none; overflow: hidden; }
@@ -157,15 +157,16 @@ img.mark { object-fit: contain; border-radius: 0; background: none; overflow: vi
 .brand-text strong { font-family: var(--serif); font-size: clamp(.86rem, 1.8vw, 1.1rem); font-weight: 600; white-space: nowrap; }
 .brand-text small { color: var(--muted); font-size: .86rem; }
 @media (max-width: 900px) { .brand-text strong { white-space: normal; } }
-.bar-right { display: flex; align-items: center; gap: 8px; margin-left: auto; }
-.lang { background: var(--surface); border: 1.5px solid var(--line); border-radius: 999px; padding: 8px 16px; min-height: 44px; font-family: var(--sans); font-size: .98rem; font-weight: 600; color: var(--ink-2); cursor: pointer; }
+.bar-right { display: flex; align-items: center; gap: 6px; margin-left: auto; flex: none; }
+.lang { background: var(--surface); border: 1.5px solid var(--line); border-radius: 999px; padding: 0 12px 0 10px; height: 38px; display: inline-flex; align-items: center; gap: 6px; font-family: var(--sans); font-size: .86rem; font-weight: 600; color: var(--ink-2); cursor: pointer; white-space: nowrap; }
+.lang-ico { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.5; flex: none; }
 .lang:hover { border-color: var(--gold); color: var(--ink-text); }
 .appearance { position: relative; }
 .appearance-btn {
-  background: var(--surface); border: 1.5px solid var(--line); border-radius: 50%; width: 44px; height: 44px;
+  background: var(--surface); border: 1.5px solid var(--line); border-radius: 50%; width: 38px; height: 38px;
   display: grid; place-items: center; cursor: pointer; color: var(--text);
 }
-.appearance-btn svg { width: 19px; height: 19px; stroke: currentColor; fill: none; }
+.appearance-btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; }
 .appearance-btn:hover { border-color: var(--gold); color: var(--ink-text); }
 .appearance-menu {
   position: absolute; top: calc(100% + 8px); right: 0; min-width: 220px; background: var(--surface); border: 1px solid var(--line);
@@ -197,7 +198,7 @@ img.mark { object-fit: contain; border-radius: 0; background: none; overflow: vi
   border-width: 2px;
 }
 [data-contrast="high"] .notice { border-left-width: 5px; }
-.nav-toggle { background: none; border: 1px solid var(--line); border-radius: 10px; width: 44px; height: 44px; cursor: pointer; display: grid; place-items: center; }
+.nav-toggle { background: none; border: 1px solid var(--line); border-radius: 10px; width: 40px; height: 40px; cursor: pointer; display: grid; place-items: center; }
 .nav-toggle i, .nav-toggle i::before, .nav-toggle i::after { display: block; width: 20px; height: 2px; background: var(--ink-text); border-radius: 2px; content: ""; position: relative; }
 .nav-toggle i::before { position: absolute; top: -6px; }
 .nav-toggle i::after { position: absolute; top: 6px; }
@@ -566,4 +567,31 @@ footer.site a.ficon:hover, .ficon:hover { background: var(--gold-soft); color: v
 .pmonth { margin-bottom: 18px; }
 .pmonth:last-child { margin-bottom: 0; }
 .pmonth h3 { font-size: 1rem; color: var(--muted); font-family: var(--sans); font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: .02em; }
-.prow td:first-child { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+
+/* ---------- Activities menu tag, activity pages ---------- */
+nav a small { background: var(--mist); color: var(--ink-2); border-radius: 999px; padding: 1px 9px; font-size: .74rem; font-weight: 600; margin-left: 10px; white-space: nowrap; }
+.act-card { display: block; text-decoration: none; color: inherit; }
+.act-card h3 { color: var(--ink-text); margin-bottom: 8px; }
+.act-card .chip { margin-bottom: 8px; }
+.act-page .chip { margin-bottom: 14px; }
+.act-page ul { margin: 0 0 16px; padding-left: 20px; }
+.y-common { margin: 4px 0 22px; }
+
+/* ---------- Punyarjak table: rows stay aligned; on phones each row is date + category, then the name ---------- */
+.prow .pd-in { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; }
+@media (max-width: 560px) {
+  .ptbl { min-width: 0; }
+  .ptbl tr { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2px 14px; padding: 11px 14px; border-bottom: 1px solid var(--line); }
+  .ptbl tr:last-child { border-bottom: 0; }
+  .ptbl td { padding: 0; border: 0; }
+  .ptbl .pk { text-align: right; color: var(--muted); font-size: .88rem; }
+  .ptbl .pn { grid-column: 1 / -1; font-weight: 600; }
+}
+
+.lang-short { display: none; }
+@media (max-width: 480px) {
+  .lang-full { display: none; }
+  .lang-short { display: inline; }
+  .lang { padding: 0 11px 0 9px; }
+  .brand-text strong { font-size: .84rem; }
+}
