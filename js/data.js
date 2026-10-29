@@ -63,7 +63,7 @@ window.SITE = {
   //  mapLink / mapEmbed: optional. Paste your own Google Maps share link /
   //            embed src if you want to override the automatic ones.
   mapQuery: "",
-  mapLink: "https://www.google.com/maps/search/?api=1&query=18.587649567124686,74.00815587372229",
+  mapLink: "https://maps.app.goo.gl/hmgaJF2hrvdnN2jf8",
   mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3781.6979918312923!2d74.00815587372229!3d18.587649567124686!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c3005211eeaf%3A0x258f5a756ded4252!2sShri%201008%20Neminath%20Jinalay%2C%20Nemidham!5e0!3m2!1sen!2sin!4v1793055390325!5m2!1sen!2sin",
 
   // Social links: fill them in section 0 at the top of this file.
