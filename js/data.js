@@ -302,7 +302,7 @@ window.YOJANA_PAGE = {
    Everything except id and title is optional. Leave a line empty (or delete it) and that part of the page is simply not shown.
    id          short name, English small letters, no spaces.
    page        the page file of this activity, e.g. "kids-club.html" (already made for the 4 below).
-               A NEW activity without its own file still works: delete the  page  line and its page opens at activity.html?id=<id>.
+               For a NEW activity, make its page file first (steps in README part 5.20), then write its name here.
    comingSoon  true shows a "Coming soon" tag. Write  comingSoon: false,  when the page is ready.
    title       name shown in the menu and at the top of the page.      short   one line under the heading.
    poster      picture of the poster, e.g. "images/activities/kids-club.jpg" (upload it into images/activities/).
