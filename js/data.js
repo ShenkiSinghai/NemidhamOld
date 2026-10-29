@@ -90,7 +90,7 @@ window.SITE = {
   //             Or write one album's id (e.g. "vedi-pratishtha") to only ever show that album.
   //   shuffle   false (default) keeps the same order every time, so it doesn't look random.
   //             Set true if you'd rather it mix the photos up differently on every visit.
-  //   count     how many photos to pull into the strip.
+  //   count     how many photos to pull into the strip. Write  count: "all"  to show EVERY photo of the album(s).
   //   seconds   how many seconds between each automatic scroll.
   slideshow: { enabled: true, source: "kshamavani-2026", shuffle: false, count: "all", seconds: 3 },
 
@@ -98,8 +98,9 @@ window.SITE = {
   // Set to false if you want last/next month's names to stay visible too.
   punyarjakCurrentMonthOnly: true,
 
-  // Gallery mein albums ka order: "newest" = latest pehle, "oldest" = purana pehle
-     albumOrder: "newest",
+  // Order of the albums on the Gallery page (photos and videos), by each album's date:
+  //   "newest"  latest album first (default).   "oldest"  oldest album first.
+  albumOrder: "newest",
 
   // Karyakram older than this many days drop off the "Past" tab. Use -1 to keep them all.
   karyakramPastDays: 30,
@@ -131,7 +132,9 @@ window.BANNER = {
 // status: "active" (efforts underway), "soon" (coming later), "done" (completed)
 // target / raised: optional, e.g. "₹ 11,00,000". Leave "" to hide.
 // details: a short list of points (optional).
-// link: optional button-like link inside the card, e.g. { href: "team.html", text: { hi: "...", en: "..." } }
+// formUrl: optional Google Form link. Empty "" (or no line) = no button. Paste a link to show a "Submit your interest" button on that card.
+//   The button words come from window.YOJANA_PAGE below (or write  formText: { hi: "...", en: "..." }  inside one card).
+// The "contact for details" and "give daan" buttons are common: they sit once at the top of the Yojana page.
 // pinned: true  shows the yojana on the Home page too. Yojanayen WITHOUT  pinned: true  show only on the Yojanayen page.
 //   (If no yojana is pinned, the yojana section is left out of the Home page completely.)
 // hidden: true  hides a yojana everywhere without deleting it.
@@ -156,7 +159,6 @@ window.YOJANA = [
       { hi: "आवश्यक भूमि का क्षेत्रफल: 4000 वर्ग फुट।", en: "Land required: 4000 sq ft." },
       { hi: "भूमि दान करने के इच्छुक श्रद्धालु कृपया टीम पेज पर दिए गए सदस्यों से संपर्क करें।", en: "If you wish to donate land, please contact the members listed on the Team page." }
     ],
-    link: { href: "team.html", text: { hi: "टीम पेज देखें", en: "See the Team page" } },
     target: "", raised: ""
   },
   {
@@ -175,7 +177,6 @@ window.YOJANA = [
     details: [
       { hi: "संत शाला से संबंधित जानकारी के लिए कृपया टीम से संपर्क करें।", en: "For information about the Sant Shala, please connect with the Team." }
     ],
-    link: { href: "team.html", text: { hi: "टीम पेज देखें", en: "See the Team page" } },
     target: "", raised: ""
   },
   {
@@ -231,6 +232,106 @@ window.YOJANA = [
     },
     details: [],
     target: "", raised: ""
+  },
+
+  // ---- 4 spare cards (hidden). To use one: delete its  hidden: true,  line and write your own text. ----
+  {
+    hidden: true,   // spare card "Yojana 1": delete this line, then write your own text
+    id: "yojana-1",
+    status: "active",
+    title: { hi: "योजना 1", en: "Yojana 1" },
+    short: { hi: "यहाँ योजना की एक लाइन लिखें।", en: "Write a one-line summary of the yojana here." },
+    summary: { hi: "यहाँ योजना का पूरा विवरण लिखें।", en: "Write the full details of the yojana here." },
+    details: [],
+    target: "", raised: "",
+    formUrl: ""     // Google Form link. Empty = no form button. Paste a link between the quotes to show the button.
+  },
+  {
+    hidden: true,   // spare card "Yojana 2": delete this line, then write your own text
+    id: "yojana-2",
+    status: "active",
+    title: { hi: "योजना 2", en: "Yojana 2" },
+    short: { hi: "यहाँ योजना की एक लाइन लिखें।", en: "Write a one-line summary of the yojana here." },
+    summary: { hi: "यहाँ योजना का पूरा विवरण लिखें।", en: "Write the full details of the yojana here." },
+    details: [],
+    target: "", raised: "",
+    formUrl: ""     // Google Form link. Empty = no form button. Paste a link between the quotes to show the button.
+  },
+  {
+    hidden: true,   // spare card "Yojana 3": delete this line, then write your own text
+    id: "yojana-3",
+    status: "active",
+    title: { hi: "योजना 3", en: "Yojana 3" },
+    short: { hi: "यहाँ योजना की एक लाइन लिखें।", en: "Write a one-line summary of the yojana here." },
+    summary: { hi: "यहाँ योजना का पूरा विवरण लिखें।", en: "Write the full details of the yojana here." },
+    details: [],
+    target: "", raised: "",
+    formUrl: ""     // Google Form link. Empty = no form button. Paste a link between the quotes to show the button.
+  },
+  {
+    hidden: true,   // spare card "Yojana 4": delete this line, then write your own text
+    id: "yojana-4",
+    status: "active",
+    title: { hi: "योजना 4", en: "Yojana 4" },
+    short: { hi: "यहाँ योजना की एक लाइन लिखें।", en: "Write a one-line summary of the yojana here." },
+    summary: { hi: "यहाँ योजना का पूरा विवरण लिखें।", en: "Write the full details of the yojana here." },
+    details: [],
+    target: "", raised: "",
+    formUrl: ""     // Google Form link. Empty = no form button. Paste a link between the quotes to show the button.
+  }
+];
+
+/* ---------- 3क. Common wording on the Yojana page (optional) ----------
+   The two buttons at the top of the Yojana page, and the Google Form button on a card, use the words below.
+   To change a word, edit the text between the quotes. Leave "" to use the standard wording.
+   contactText  button that opens the Team page ("Contact us for details").
+   daanText     button that opens the Daan page ("Give daan for the yojanayen").
+   formText     the Google Form button on a card (shows only on cards that have a formUrl).
+                A single card can use its own words with  formText: { hi: "...", en: "..." }  inside that card. */
+window.YOJANA_PAGE = {
+  contactText: { hi: "", en: "" },   // default: जानकारी के लिए संपर्क करें / Contact us for details
+  daanText:    { hi: "", en: "" },   // default: योजनाओं के लिए दान करें / Give daan for the yojanayen
+  formText:    { hi: "", en: "" }    // default: अपनी रुचि दर्ज करें / Submit your interest
+};
+
+/* ---------- 3ख. Activities menu (Nemidham Cricket Club, Trekking, ...) ----------
+   Every block below becomes one item in the "Activities" menu, and gets its own page.
+   TO ADD an activity: copy one whole { ... }, block, paste it after the last one, change id and the text.
+   TO REMOVE: delete its block.   TO HIDE for now: add  hidden: true,  inside it.
+   If every block is hidden or removed, the Activities menu disappears by itself.
+   id             short name, English small letters, no spaces (it is part of the page address).
+   comingSoon     true shows a "Coming soon" tag. Write  comingSoon: false,  when the page is ready.
+   short          one line shown under the page heading and on the activities list.
+   paragraphs     the text of the page (as many as you like). Empty = "details coming soon" message.
+   list           optional bullet points (like the rules list on the About page). */
+window.ACTIVITIES = [
+  {
+    id: "cricket-club", comingSoon: true,
+    title: { hi: "नेमिधाम क्रिकेट क्लब", en: "Nemidham Cricket Club" },
+    short: { hi: "जल्द आ रहा है।", en: "Coming soon." },
+    paragraphs: [],
+    list: []
+  },
+  {
+    id: "trekking", comingSoon: true,
+    title: { hi: "नेमिधाम ट्रेकिंग", en: "Nemidham Trekking" },
+    short: { hi: "जल्द आ रहा है।", en: "Coming soon." },
+    paragraphs: [],
+    list: []
+  },
+  {
+    id: "tirth-yatra", comingSoon: true,
+    title: { hi: "नेमिधाम तीर्थ यात्रा", en: "Nemidham Tirth Yatra" },
+    short: { hi: "जल्द आ रहा है।", en: "Coming soon." },
+    paragraphs: [],
+    list: []
+  },
+  {
+    id: "kids-club", comingSoon: true,
+    title: { hi: "नेमिधाम किड्स क्लब", en: "Nemidham Kids Club" },
+    short: { hi: "जल्द आ रहा है।", en: "Coming soon." },
+    paragraphs: [],
+    list: []
   }
 ];
 

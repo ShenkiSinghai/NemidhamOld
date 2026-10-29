@@ -4,7 +4,7 @@
 window.UI = {
   hi: {
     "skip": "मुख्य सामग्री पर जाएँ", "menu": "मेनू",
-    "lang.btn": "English", "lang.aria": "Switch to English", "lang.code": "en",
+    "lang.btn": "English", "lang.short": "EN", "lang.aria": "Switch to English", "lang.code": "en",
     "theme.appearance": "अपीयरेंस सेटिंग्स", "theme.theme": "थीम", "theme.light": "लाइट", "theme.dark": "डार्क",
     "theme.contrast": "कंट्रास्ट", "theme.normal": "सामान्य", "theme.high": "ज़्यादा कंट्रास्ट",
     "nav.home": "होम", "nav.yojana": "योजनाएं",
@@ -71,6 +71,10 @@ window.UI = {
     "st.active": "प्रयास जारी है", "st.soon": "जल्द आ रही है", "st.done": "पूर्ण",
     "y.target": "लक्ष्य", "y.raised": "अब तक",
     "y.give": "इस योजना के लिए दान करें", "y.ask": "जानकारी के लिए संपर्क करें",
+    "y.common_contact": "जानकारी के लिए संपर्क करें", "y.common_daan": "योजनाओं के लिए दान करें", "y.form": "अपनी रुचि दर्ज करें",
+    "nav.activities": "गतिविधियाँ", "act.soon": "जल्द आ रहा है", "act.soon_text": "इस गतिविधि की पूरी जानकारी जल्द यहाँ जोड़ी जाएगी। हमसे जुड़े रहें।",
+    "act.none": "गतिविधियों की जानकारी जल्द जोड़ी जाएगी।", "act.back": "← सभी गतिविधियाँ",
+    "p.activity.h1": "गतिविधियाँ", "p.activity.lead": "नेमिधाम परिवार की क्लब, यात्राएँ और अन्य गतिविधियाँ।",
     "y.intro": "मंदिर बना हुआ है और उसका विकास जारी है। नीचे उन कामों की सूची है जिनमें हमें आपका सहयोग चाहिए।",
     "y.now": "अभी की योजनाएं", "y.later": "आगे की योजनाएं",
 
@@ -102,7 +106,7 @@ window.UI = {
 
   en: {
     "skip": "Skip to content", "menu": "Menu",
-    "lang.btn": "हिंदी", "lang.aria": "हिंदी में देखें", "lang.code": "hi",
+    "lang.btn": "हिंदी", "lang.short": "हिं", "lang.aria": "हिंदी में देखें", "lang.code": "hi",
     "theme.appearance": "Appearance settings", "theme.theme": "Theme", "theme.light": "Light", "theme.dark": "Dark",
     "theme.contrast": "Contrast", "theme.normal": "Normal", "theme.high": "Increase contrast",
     "nav.home": "Home", "nav.yojana": "Yojanayen",
@@ -169,6 +173,10 @@ window.UI = {
     "st.active": "Efforts underway", "st.soon": "Coming soon", "st.done": "Completed",
     "y.target": "Target", "y.raised": "Raised so far",
     "y.give": "Give daan for this yojana", "y.ask": "Contact for details",
+    "y.common_contact": "Contact us for details", "y.common_daan": "Give daan for the yojanayen", "y.form": "Submit your interest",
+    "nav.activities": "Activities", "act.soon": "Coming soon", "act.soon_text": "Full details of this activity will be added here soon. Stay connected.",
+    "act.none": "Activity details will be added soon.", "act.back": "← All activities",
+    "p.activity.h1": "Activities", "p.activity.lead": "Clubs, yatras and other activities of the Nemidham family.",
     "y.intro": "The mandir is built and still growing. These are the works we are asking for your support on.",
     "y.now": "Current yojanayen", "y.later": "Plans for later",
 

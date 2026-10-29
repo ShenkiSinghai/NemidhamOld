@@ -144,14 +144,30 @@
     { k: "nav.daan", href: "daan.html", p: "daan" }
   ];
 
+  /* The "Activities" menu is built from window.ACTIVITIES in data.js (so new items can be added there
+     without touching code). If that list is empty or missing, the whole menu item is left out. */
+  function activityId() { try { return new URLSearchParams(location.search).get("id") || ""; } catch (e) { return ""; } }
+  function navList() {
+    var acts = vis(window.ACTIVITIES);
+    if (!acts.length) return NAV;
+    var kids = acts.map(function (a) {
+      return { label: L(a.title), href: "activity.html?id=" + encodeURIComponent(a.id), p: "activity", q: a.id, tag: a.comingSoon !== false };
+    });
+    var out = NAV.slice(), at = 0;
+    out.forEach(function (n, i) { if (n.p === "gallery") at = i + 1; });
+    out.splice(at, 0, { k: "nav.activities", id: "act", kids: kids });
+    return out;
+  }
   function navLink(n) {
-    return '<a href="' + n.href + '"' + (n.p === page ? ' aria-current="page"' : "") + (n.cls ? ' class="' + n.cls + '"' : "") + ">" + esc(t(n.k)) + "</a>";
+    var cur = n.p === page && (!n.q || n.q === activityId());
+    return '<a href="' + n.href + '"' + (cur ? ' aria-current="page"' : "") + (n.cls ? ' class="' + n.cls + '"' : "") + ">" +
+      esc(n.label || t(n.k)) + (n.tag ? "<small>" + esc(t("act.soon")) + "</small>" : "") + "</a>";
   }
   function navItem(n) {
     if (!n.kids) return "<li>" + navLink(n) + "</li>";
     var current = n.kids.some(function (c) { return c.p === page; });
     return '<li class="has-sub' + (current ? " current" : "") + '"><button type="button" class="sub-toggle" aria-expanded="false" aria-controls="sub-' + n.id + '">' +
-      esc(t(n.k)) + '<span class="caret" aria-hidden="true"></span></button><ul class="sub" id="sub-' + n.id + '">' +
+      esc(n.label || t(n.k)) + '<span class="caret" aria-hidden="true"></span></button><ul class="sub" id="sub-' + n.id + '">' +
       n.kids.map(function (c) {
         return c.soon
           ? '<li><span class="soon-item">' + esc(t(c.k)) + "<small>" + esc(t("soon")) + "</small></span></li>"
@@ -187,6 +203,7 @@
     '<line x1="3" y1="10" x2="17" y2="10"></line><circle cx="13" cy="10" r="2.1" style="fill:var(--surface)"></circle>' +
     '<line x1="3" y1="15" x2="17" y2="15"></line><circle cx="7" cy="15" r="2.1" style="fill:var(--surface)"></circle>' +
     "</svg>";
+  var LANG_ICON = '<svg class="lang-ico" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8"></circle><ellipse cx="10" cy="10" rx="3.6" ry="8"></ellipse><line x1="2" y1="10" x2="18" y2="10"></line></svg>';
   function appearanceHtml() {
     return '<div class="appearance">' +
       '<button class="appearance-btn" type="button" title="' + esc(t("theme.appearance")) + '" aria-label="' + esc(t("theme.appearance")) + '" aria-haspopup="true" aria-expanded="false">' + APPEARANCE_ICON + "</button>" +
@@ -208,8 +225,8 @@
       '<header class="site"><div class="wrap bar">' +
       '<a class="brand" href="index.html">' + (S.logo ? '<img class="mark" src="' + esc(S.logo) + '" alt="">' : '<span class="mark" aria-hidden="true">ने</span>') + '' +
       '<span class="brand-text"><strong>' + esc(L(S.name)) + "</strong><small>" + esc(L(S.place)) + "</small></span></a>" +
-      '<nav id="nav" aria-label="' + esc(t("menu")) + '"><ul>' + NAV.map(navItem).join("") + "</ul></nav>" +
-      '<div class="bar-right"><button class="lang" type="button" lang="' + esc(t("lang.code")) + '" aria-label="' + esc(t("lang.aria")) + '">' + esc(t("lang.btn")) + "</button>" + appearanceHtml() +
+      '<nav id="nav" aria-label="' + esc(t("menu")) + '"><ul>' + navList().map(navItem).join("") + "</ul></nav>" +
+      '<div class="bar-right"><button class="lang" type="button" lang="' + esc(t("lang.code")) + '" aria-label="' + esc(t("lang.aria")) + '">' + LANG_ICON + '<span class="lang-full">' + esc(t("lang.btn")) + '</span><span class="lang-short" aria-hidden="true">' + esc(t("lang.short")) + "</span></button>" + appearanceHtml() +
       '<button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav"><span class="sr">' + esc(t("menu")) + "</span><i></i></button></div>" +
       "</div></header>");
 
@@ -464,24 +481,54 @@
     var money = "";
     if (y.target) money += "<div><dt>" + esc(t("y.target")) + "</dt><dd>" + esc(y.target) + "</dd></div>";
     if (y.raised) money += "<div><dt>" + esc(t("y.raised")) + "</dt><dd>" + esc(y.raised) + "</dd></div>";
-    var btn = st === "soon" ? '<a class="btn btn-line" href="visit.html#contact">' + esc(t("y.ask")) + "</a>"
-      : st === "done" ? "" : '<a class="btn btn-primary" href="daan.html#how">' + esc(t("y.give")) + "</a>";
-    var link2 = !compact && y.link && y.link.href && L(y.link.text) ? '<a class="btn btn-line" href="' + esc(y.link.href) + '">' + esc(L(y.link.text)) + "</a>" : "";
+    /* No per-card "give daan / contact" buttons any more: those are common, at the top of the page.
+       A card only gets a form button when it has formUrl (a Google Form link) in data.js. */
+    var btn = /^https?:\/\//i.test(String(y.formUrl || "").trim())
+      ? '<a class="btn btn-primary" href="' + esc(String(y.formUrl).trim()) + '" target="_blank" rel="noopener">' + esc(L(y.formText) || yojanaText("formText", "y.form")) + "</a>" : "";
+    var link2 = "";   // the old per-card "link" button is gone: contact and daan buttons are common, at the top of the page
     return '<article class="yojana" id="' + esc(y.id) + '"><div class="yhead"><h3>' + esc(L(y.title)) + "</h3>" + chip + "</div><p>" + esc(L(y.summary || y.short)) + "</p>" +
       (det ? "<ul>" + det + "</ul>" : "") + (money ? '<dl class="rows">' + money + "</dl>" : "") + (btn || link2 ? '<div class="btn-row">' + btn + link2 + "</div>" : "") + "</article>";
   }
+  /* Common wording on the Yojana page: window.YOJANA_PAGE in data.js can override it; otherwise i18n.js has the default. */
+  function yojanaText(key, i18nKey) { return L((window.YOJANA_PAGE || {})[key]) || t(i18nKey); }
   function renderYojanaPage() {
     var host = document.getElementById("yojana-list"); if (!host) return;
     var all = vis(window.YOJANA);
     var now = all.filter(function (y) { return y.status !== "soon"; });
     var later = all.filter(function (y) { return y.status === "soon"; });
     host.innerHTML = '<p class="measure">' + esc(t("y.intro")) + "</p>" +
+      '<div class="btn-row y-common"><a class="btn btn-line" href="team.html">' + esc(yojanaText("contactText", "y.common_contact")) + '</a>' +
+      '<a class="btn btn-primary" href="daan.html">' + esc(yojanaText("daanText", "y.common_daan")) + "</a></div>" +
       (now.length ? '<section><h2>' + esc(t("y.now")) + '</h2><div class="ylist">' + now.map(function (y) { return yojanaCard(y); }).join("") + "</div></section>" : "") +
       (later.length ? '<section><h2>' + esc(t("y.later")) + '</h2><div class="ylist">' + later.map(function (y) { return yojanaCard(y); }).join("") + "</div></section>" : "");
   }
   function renderHomeYojana() {
     var all = vis(window.YOJANA).filter(function (y) { return y.pinned; });
     putHome("home-yojana", all.length ? '<div class="cards three">' + all.map(function (y) { return yojanaCard(y, true); }).join("") + "</div>" : "");
+  }
+
+  /* ---------- activities (menu: Nemidham Cricket Club, Trekking, ...) ---------- */
+  function activityCard(a) {
+    var soon = a.comingSoon !== false;
+    return '<a class="card act-card" href="activity.html?id=' + encodeURIComponent(a.id) + '"><h3>' + esc(L(a.title)) + "</h3>" +
+      (soon ? '<span class="chip chip-soon">' + esc(t("act.soon")) + "</span>" : "") + (L(a.short) ? "<p>" + esc(L(a.short)) + "</p>" : "") + "</a>";
+  }
+  function renderActivityPage() {
+    var host = document.getElementById("activity"); if (!host) return;
+    var all = vis(window.ACTIVITIES), id = activityId();
+    var a = all.filter(function (x) { return x.id === id; })[0];
+    if (!a) {
+      host.innerHTML = all.length ? '<div class="cards three">' + all.map(activityCard).join("") + "</div>" : '<p class="empty">' + esc(t("act.none")) + "</p>";
+      return;
+    }
+    setHead(L(a.title), L(a.short));
+    var soon = a.comingSoon !== false;
+    var paras = (a.paragraphs || []).filter(function (x) { return L(x); }).map(function (x) { return "<p>" + esc(L(x)) + "</p>"; }).join("");
+    var list = (a.list || []).filter(function (x) { return L(x); }).map(function (x) { return "<li>" + esc(L(x)) + "</li>"; }).join("");
+    host.innerHTML = '<a class="back" href="activity.html">' + esc(t("act.back")) + "</a>" +
+      '<article class="card act-page">' + (soon ? '<span class="chip chip-soon">' + esc(t("act.soon")) + "</span>" : "") +
+      (soon && !paras ? '<p>' + esc(t("act.soon_text")) + "</p>" : "") + paras + (list ? "<ul>" + list + "</ul>" : "") +
+      '<div class="btn-row"><a class="btn btn-line" href="team.html">' + esc(t("y.common_contact")) + "</a></div></article>";
   }
 
   /* ---------- karyakram + calendar ---------- */
@@ -979,9 +1026,9 @@
           months[ym].push(p);
         });
         pbody.innerHTML = order.length ? order.map(function (ym) {
-          return '<div class="pmonth"><h3>' + esc(monthLabel(ym)) + '</h3><div class="tbl-wrap"><table class="tbl"><tbody>' +
+          return '<div class="pmonth"><h3>' + esc(monthLabel(ym)) + '</h3><div class="tbl-wrap"><table class="tbl ptbl"><tbody>' +
             months[ym].map(function (p) {
-              return '<tr class="prow k-' + esc(p.kind) + '"><td><i class="dot dot-' + esc(p.kind) + '"></i>' + esc(longDate(p.date)) + "</td><td>" + esc(t("kind." + p.kind)) + "</td><td>" + esc(L(p.name)) + "</td></tr>";
+              return '<tr class="prow k-' + esc(p.kind) + '"><td class="pd"><span class="pd-in"><i class="dot dot-' + esc(p.kind) + '"></i>' + esc(longDate(p.date)) + '</span></td><td class="pk">' + esc(t("kind." + p.kind)) + '</td><td class="pn">' + esc(L(p.name)) + "</td></tr>";
             }).join("") + "</tbody></table></div></div>";
         }).join("") : '<p class="empty">' + esc(t("empty.punya")) + "</p>";
       }
@@ -1096,6 +1143,7 @@
         renderHomeYojana(); renderAnnouncements(); renderHomeEvents(); renderHomeGallery(); renderConnect();
         break;
       case "yojana": renderYojanaPage(); break;
+      case "activity": renderActivityPage(); break;
       case "karyakram": renderKaryakram(); break;
       case "calendar": renderCalendar(); break;
       case "announcements": renderAnnouncementsPage(); break;
