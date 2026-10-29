@@ -295,43 +295,172 @@ window.YOJANA_PAGE = {
 };
 
 /* ---------- 3ख. Activities menu (Nemidham Cricket Club, Trekking, ...) ----------
-   Every block below becomes one item in the "Activities" menu, and gets its own page.
+   Every block below becomes one item in the "Activities" menu and has its own page.
    TO ADD an activity: copy one whole { ... }, block, paste it after the last one, change id and the text.
    TO REMOVE: delete its block.   TO HIDE for now: add  hidden: true,  inside it.
    If every block is hidden or removed, the Activities menu disappears by itself.
-   id             short name, English small letters, no spaces (it is part of the page address).
-   comingSoon     true shows a "Coming soon" tag. Write  comingSoon: false,  when the page is ready.
-   short          one line shown under the page heading and on the activities list.
-   paragraphs     the text of the page (as many as you like). Empty = "details coming soon" message.
-   list           optional bullet points (like the rules list on the About page). */
+   Everything except id and title is optional. Leave a line empty (or delete it) and that part of the page is simply not shown.
+   id          short name, English small letters, no spaces.
+   page        the page file of this activity, e.g. "kids-club.html" (already made for the 4 below).
+               A NEW activity without its own file still works: delete the  page  line and its page opens at activity.html?id=<id>.
+   comingSoon  true shows a "Coming soon" tag. Write  comingSoon: false,  when the page is ready.
+   title       name shown in the menu and at the top of the page.      short   one line under the heading.
+   poster      picture of the poster, e.g. "images/activities/kids-club.jpg" (upload it into images/activities/).
+               Visitors tap it to see it full size. Make the picture small first (README part 4).
+   info        quick facts: { label: {hi,en}, value: {hi,en} },  e.g. When / Where / Fee.
+   paragraphs  plain text paragraphs.      list   bullet points.
+   sections    extra boxes with a heading:  { title: {hi,en}, paragraphs: [...], list: [...] }
+   contacts    people to call: { name: {hi,en}, role: {hi,en}, phone: "+91 98765 43210" }.
+               If there are none, a "Contact us" button to the Team page is shown instead.
+   contactNote one line above the contact people.
+   formUrl     optional Google Form link. Paste it between the quotes and a button appears. formText = its words.  */
 window.ACTIVITIES = [
   {
-    id: "cricket-club", comingSoon: true,
+    id: "cricket-club", page: "cricket-club.html", comingSoon: true,
     title: { hi: "नेमिधाम क्रिकेट क्लब", en: "Nemidham Cricket Club" },
     short: { hi: "जल्द आ रहा है।", en: "Coming soon." },
+    poster: "",
+    info: [],
     paragraphs: [],
-    list: []
+    sections: [],
+    contacts: [],
+    formUrl: ""
   },
   {
-    id: "trekking", comingSoon: true,
-    title: { hi: "नेमिधाम ट्रेकिंग", en: "Nemidham Trekking" },
-    short: { hi: "जल्द आ रहा है।", en: "Coming soon." },
-    paragraphs: [],
-    list: []
+    id: "trekking", page: "trekking.html", comingSoon: false,
+    title: { hi: "नेमिधाम ट्रेकिंग क्लब", en: "Nemidham Trekking Club" },
+    short: { hi: "भक्ति, प्रकृति, फिटनेस, संगीत, स्वाद, खेल और परिवार: मंदिर से पहाड़ी तक।", en: "Devotion, nature, fitness, music, food, games and family: from the mandir to the hill." },
+    poster: "images/activities/trekking.jpg",
+    info: [
+      { label: { hi: "कब", en: "When" }, value: { hi: "हर महीने का तीसरा रविवार", en: "Third Sunday of every month" } },
+      { label: { hi: "कहाँ", en: "Where" }, value: { hi: "नेमिधाम से वाघोली पहाड़ी तक", en: "Nemidham to Wagholi hill" } },
+      { label: { hi: "समय", en: "Time" }, value: { hi: "सुबह 6:00 से दोपहर 3:00 बजे तक", en: "6:00 AM to 3:00 PM" } }
+    ],
+    paragraphs: [
+      { hi: "सुबह भगवान के चरणों में शुरुआत, दिनभर प्रकृति, मित्रता और मस्ती के साथ। मंदिर से पहाड़ी तक, पहाड़ी से मैदान तक!", en: "Start the morning at the feet of Bhagwan, and spend the day with nature, friends and fun. From the mandir to the hill, from the hill to the ground!" }
+    ],
+    sections: [
+      {
+        title: { hi: "दिन का कार्यक्रम", en: "Programme of the day" },
+        list: [
+          { hi: "6:00 – 6:30 सुबह: श्रीजी का अभिषेक एवं शांतिधारा", en: "6:00 – 6:30 AM: Abhishek and Shantidhara of Shriji" },
+          { hi: "6:30 – 7:00: पूजन एवं मंगल पाठ", en: "6:30 – 7:00 AM: Pujan and Mangal Path" },
+          { hi: "7:00 – 7:15: ट्रेकिंग ब्रीफिंग (रूट, सुरक्षा निर्देश)", en: "7:00 – 7:15 AM: Trekking briefing (route, safety instructions)" },
+          { hi: "7:15 – 8:30: वाघोली पहाड़ी की ओर ट्रेकिंग", en: "7:15 – 8:30 AM: Trek towards Wagholi hill" },
+          { hi: "8:30 – 9:00: पहाड़ी पर विश्राम एवं नाश्ता", en: "8:30 – 9:00 AM: Rest and breakfast on the hill" },
+          { hi: "9:00 – 9:45: Singing & Antakshari (भजन, देशभक्ति, पुराने गीत, Open Mic)", en: "9:00 – 9:45 AM: Singing & Antakshari (bhajan, patriotic, old songs, Open Mic)" },
+          { hi: "9:45 – 10:30: Fun Games & Team Activities (Treasure Hunt, Nature Bingo, बच्चों के गेम्स)", en: "9:45 – 10:30 AM: Fun Games & Team Activities (Treasure Hunt, Nature Bingo, kids' games)" },
+          { hi: "10:30 – 11:00: वापसी ट्रेक (नेमिधाम)", en: "10:30 – 11:00 AM: Return trek to Nemidham" }
+        ]
+      },
+      {
+        title: { hi: "नेमिधाम वापस आने के बाद", en: "After returning to Nemidham" },
+        list: [
+          { hi: "11:30 सुबह – 1:00 दोपहर: गक्कड़-भरता का सामूहिक कार्यक्रम (गरमा-गरम, साथ बैठकर)", en: "11:30 AM – 1:00 PM: Group gakkad-bharta meal (hot, eaten together)" },
+          { hi: "1:00 – 3:00 दोपहर: क्रिकेट मैच (बच्चों का, युवाओं का, फैमिली टीम, मज़ेदार चैलेंज)", en: "1:00 – 3:00 PM: Cricket match (kids, youth, family team, fun challenges)" },
+          { hi: "3:00 दोपहर: सामूहिक समापन एवं विदाई (मंगल पाठ एवं अगले महीने की घोषणा)", en: "3:00 PM: Closing together and farewell (Mangal Path and next month's announcement)" }
+        ]
+      },
+      {
+        title: { hi: "क्यों जुड़ें?", en: "Why join?" },
+        list: [
+          { hi: "धार्मिक ऊर्जा", en: "Spiritual energy" },
+          { hi: "प्रकृति से जुड़ाव", en: "Connection with nature" },
+          { hi: "फिटनेस और स्वास्थ्य", en: "Fitness and health" },
+          { hi: "गीत-संगीत और आनंद", en: "Music and joy" },
+          { hi: "परिवार और मित्रता", en: "Family and friendship" },
+          { hi: "स्वादिष्ट गक्कड़-भरता", en: "Tasty gakkad-bharta" },
+          { hi: "खेल और टीम स्पिरिट", en: "Sports and team spirit" }
+        ]
+      },
+      {
+        title: { hi: "हमारे नियम", en: "Our rules" },
+        list: [
+          { hi: "प्लास्टिक नहीं (No Plastic)", en: "No Plastic" },
+          { hi: "कचरा नहीं फैलाना (No Litter)", en: "No Litter" },
+          { hi: "प्रकृति को नुकसान नहीं (No Damage to Nature)", en: "No Damage to Nature" },
+          { hi: "सब साथ रहें (Stay Together)", en: "Stay Together" }
+        ]
+      }
+    ],
+    contactNote: { hi: "ट्रेकिंग में जुड़ने और जानकारी के लिए संपर्क करें।", en: "To join the trek or for more information, please contact us." },
+    // To show people to call, remove the two slashes in front of the lines below and write the real name and number.
+    // contacts: [ { name: { hi: "नाम", en: "Name" }, phone: "+91 98765 43210" } ],
+    contacts: [],
+    formUrl: ""
   },
   {
-    id: "tirth-yatra", comingSoon: true,
+    id: "tirth-yatra", page: "tirth-yatra.html", comingSoon: true,
     title: { hi: "नेमिधाम तीर्थ यात्रा", en: "Nemidham Tirth Yatra" },
     short: { hi: "जल्द आ रहा है।", en: "Coming soon." },
+    poster: "",
+    info: [],
     paragraphs: [],
-    list: []
+    sections: [],
+    contacts: [],
+    formUrl: ""
   },
   {
-    id: "kids-club", comingSoon: true,
+    id: "kids-club", page: "kids-club.html", comingSoon: false,
     title: { hi: "नेमिधाम किड्स क्लब", en: "Nemidham Kids Club" },
-    short: { hi: "जल्द आ रहा है।", en: "Coming soon." },
-    paragraphs: [],
-    list: []
+    short: { hi: "बच्चों के लिए धर्म-संस्कार, खेल और शिक्षा का संगम।", en: "Dharma, sanskar, games and learning for children, all together." },
+    poster: "images/activities/kids-club.jpg",
+    info: [
+      { label: { hi: "कब", en: "When" }, value: { hi: "हर शनिवार शाम", en: "Every Saturday evening" } },
+      { label: { hi: "कहाँ", en: "Where" }, value: { hi: "श्री नेमिनाथ जिनालय (मंदिर) में", en: "At Shri Neminath Jinalay (mandir)" } },
+      { label: { hi: "सीटें", en: "Seats" }, value: { hi: "सीमित: केवल 10-12 बच्चे", en: "Limited: only 10-12 children" } },
+      { label: { hi: "पेरेंट्स", en: "Parents" }, value: { hi: "रोज़ ₹10 दें (बचत की आदत के लिए)", en: "Give ₹10 a day (to build the habit of saving)" } },
+      { label: { hi: "बच्चे", en: "Children" }, value: { hi: "हर हफ्ते ₹50 जमा करें (किटी जैसी सेविंग)", en: "Deposit ₹50 every week (kitty-style savings)" } }
+    ],
+    paragraphs: [
+      { hi: "आओ मिलें, संस्कार पाएं, सीखें और भरपूर मज़ा करें! हर हफ्ते धर्म-संस्कार, खेल और शिक्षा का संगम।", en: "Come, meet, receive sanskar, learn and have lots of fun! Every week a mix of dharma-sanskar, games and learning." }
+    ],
+    sections: [
+      {
+        title: { hi: "धर्म शिक्षा व संस्कार (धर्म से जुड़ें, जीवन संवरें)", en: "Dharma education and sanskar" },
+        list: [
+          { hi: "जैन धर्म की सरल शिक्षा", en: "Simple teaching of Jain dharma" },
+          { hi: "आदर्श जीवन की प्रेरणा", en: "Inspiration for an ideal life" },
+          { hi: "सदाचार और अच्छे व्यवहार", en: "Good conduct and good behaviour" },
+          { hi: "मंदिर दर्शन व आरती", en: "Mandir darshan and aarti" }
+        ]
+      },
+      {
+        title: { hi: "1 घंटे के फन गेम्स (खेलो, सीखो, बढ़ो)", en: "1 hour of fun games" },
+        list: [
+          { hi: "टीम गेम्स", en: "Team games" },
+          { hi: "इंटेलिजेंस एक्टिविटीज़", en: "Intelligence activities" },
+          { hi: "मस्ती भरे खेल", en: "Fun games" },
+          { hi: "क्रिएटिविटी एक्टिविटीज़", en: "Creativity activities" },
+          { hi: "सहयोग व नेतृत्व क्षमता", en: "Cooperation and leadership" }
+        ]
+      },
+      {
+        title: { hi: "शिक्षा (ज्ञान ही सच्ची शक्ति)", en: "Learning" },
+        list: [
+          { hi: "जीवन कौशल (Life Skills)", en: "Life skills" },
+          { hi: "समय प्रबंधन", en: "Time management" },
+          { hi: "संस्कारात्मक सोच", en: "Value-based thinking" },
+          { hi: "आत्मविश्वास", en: "Self-confidence" },
+          { hi: "सकारात्मक व्यक्तित्व विकास", en: "Positive personality development" }
+        ]
+      },
+      {
+        title: { hi: "हर हफ्ते की ख़ास बातें", en: "Every week" },
+        list: [
+          { hi: "हर हफ्ते नया प्रायोजक (पेरेंट होस्ट)", en: "A new sponsor every week (parent host)" },
+          { hi: "मस्ती के बाद ताज़ा दूध/जूस (हेल्दी ड्रिंक)", en: "Fresh milk or juice after the fun (healthy drink)" },
+          { hi: "खेलों में जीतें आकर्षक गिफ्ट्स (हर हफ्ते)", en: "Win attractive gifts in the games (every week)" }
+        ]
+      }
+    ],
+    contactNote: { hi: "नाम दर्ज कराने व जानकारी हेतु संपर्क करें:", en: "To register your child or for information, please contact:" },
+    contacts: [
+      { name: { hi: "सौरभ जैन", en: "Saurabh Jain" }, phone: "7987070139" },
+      { name: { hi: "अभिषेक जैन", en: "Abhishek Jain" }, phone: "8308803431" },
+      { name: { hi: "दीपक जैन", en: "Deepak Jain" }, phone: "9928218313" }
+    ],
+    formUrl: ""
   }
 ];
 

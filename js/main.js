@@ -146,12 +146,16 @@
 
   /* The "Activities" menu is built from window.ACTIVITIES in data.js (so new items can be added there
      without touching code). If that list is empty or missing, the whole menu item is left out. */
-  function activityId() { try { return new URLSearchParams(location.search).get("id") || ""; } catch (e) { return ""; } }
+  function activityId() {
+    var b = document.body && document.body.getAttribute("data-activity");
+    if (b) return b;
+    try { return new URLSearchParams(location.search).get("id") || ""; } catch (e) { return ""; }
+  }
   function navList() {
     var acts = vis(window.ACTIVITIES);
     if (!acts.length) return NAV;
     var kids = acts.map(function (a) {
-      return { label: L(a.title), href: "activity.html?id=" + encodeURIComponent(a.id), p: "activity", q: a.id, tag: a.comingSoon !== false };
+      return { label: L(a.title), href: a.page || ("activity.html?id=" + encodeURIComponent(a.id)), p: "activity", q: a.id, tag: a.comingSoon !== false };
     });
     var out = NAV.slice(), at = 0;
     out.forEach(function (n, i) { if (n.p === "gallery") at = i + 1; });
@@ -272,8 +276,11 @@
       var nb = $(".lang"); if (nb) nb.focus();
     });
 
+    fitHeader();
     if (!globalBound) {
       globalBound = true;
+      var fitT; window.addEventListener("resize", function () { clearTimeout(fitT); fitT = setTimeout(fitHeader, 120); });
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitHeader);
       document.addEventListener("click", function (e) {
         if (!e.target.closest || !e.target.closest(".has-sub")) closeSubs();
         if (!e.target.closest || !e.target.closest(".appearance")) {
@@ -290,6 +297,18 @@
         if (h && h.classList.contains("open")) { h.classList.remove("open"); var b = $(".nav-toggle", h); b.setAttribute("aria-expanded", "false"); b.focus(); }
       });
     }
+  }
+
+  /* On a wide screen the full menu is shown in one row. If the mandir name would get too squeezed
+     (long English name, big browser zoom, wide fonts), switch to the hamburger menu instead of overlapping. */
+  function fitHeader() {
+    var hdr = $("header.site"); if (!hdr) return;
+    hdr.classList.remove("compact");
+    if (!window.matchMedia("(min-width: 1230px)").matches) return;
+    var bar = $(".bar", hdr), txt = $(".brand-text", hdr), strong = $(".brand-text strong", hdr);
+    var tooTight = bar.scrollWidth > bar.clientWidth + 1 || txt.getBoundingClientRect().width < 170 ||
+      strong.scrollWidth > strong.clientWidth + 1;
+    if (tooTight) hdr.classList.add("compact");
   }
 
   function ensureTop() {
@@ -507,28 +526,51 @@
     putHome("home-yojana", all.length ? '<div class="cards three">' + all.map(function (y) { return yojanaCard(y, true); }).join("") + "</div>" : "");
   }
 
-  /* ---------- activities (menu: Nemidham Cricket Club, Trekking, ...) ---------- */
-  function activityCard(a) {
-    var soon = a.comingSoon !== false;
-    return '<a class="card act-card" href="activity.html?id=' + encodeURIComponent(a.id) + '"><h3>' + esc(L(a.title)) + "</h3>" +
-      (soon ? '<span class="chip chip-soon">' + esc(t("act.soon")) + "</span>" : "") + (L(a.short) ? "<p>" + esc(L(a.short)) + "</p>" : "") + "</a>";
+  /* ---------- activities (menu: Nemidham Cricket Club, Trekking, ...) ----------
+     Each activity has its own page (kids-club.html, trekking.html, ...). The page reads its block in
+     window.ACTIVITIES (data.js): poster picture, quick facts, text, sections, contact people, form link. */
+  function actList(items) {
+    var li = (items || []).filter(function (x) { return L(x); }).map(function (x) { return "<li>" + esc(L(x)) + "</li>"; }).join("");
+    return li ? "<ul>" + li + "</ul>" : "";
+  }
+  function actParas(items) {
+    return (items || []).filter(function (x) { return L(x); }).map(function (x) { return "<p>" + esc(L(x)) + "</p>"; }).join("");
   }
   function renderActivityPage() {
     var host = document.getElementById("activity"); if (!host) return;
-    var all = vis(window.ACTIVITIES), id = activityId();
-    var a = all.filter(function (x) { return x.id === id; })[0];
-    if (!a) {
-      host.innerHTML = all.length ? '<div class="cards three">' + all.map(activityCard).join("") + "</div>" : '<p class="empty">' + esc(t("act.none")) + "</p>";
-      return;
-    }
+    var id = activityId();
+    var a = vis(window.ACTIVITIES).filter(function (x) { return x.id === id; })[0];
+    if (!a) { host.innerHTML = '<p class="empty">' + esc(t("act.none")) + "</p>"; return; }
     setHead(L(a.title), L(a.short));
     var soon = a.comingSoon !== false;
-    var paras = (a.paragraphs || []).filter(function (x) { return L(x); }).map(function (x) { return "<p>" + esc(L(x)) + "</p>"; }).join("");
-    var list = (a.list || []).filter(function (x) { return L(x); }).map(function (x) { return "<li>" + esc(L(x)) + "</li>"; }).join("");
-    host.innerHTML = '<a class="back" href="activity.html">' + esc(t("act.back")) + "</a>" +
-      '<article class="card act-page">' + (soon ? '<span class="chip chip-soon">' + esc(t("act.soon")) + "</span>" : "") +
-      (soon && !paras ? '<p>' + esc(t("act.soon_text")) + "</p>" : "") + paras + (list ? "<ul>" + list + "</ul>" : "") +
-      '<div class="btn-row"><a class="btn btn-line" href="team.html">' + esc(t("y.common_contact")) + "</a></div></article>";
+    var paras = actParas(a.paragraphs), list = actList(a.list);
+    var facts = (a.info || []).filter(function (i) { return L(i.value); }).map(function (i) {
+      return "<div><dt>" + esc(L(i.label)) + "</dt><dd>" + esc(L(i.value)) + "</dd></div>";
+    }).join("");
+    var secs = (a.sections || []).map(function (sc) {
+      var body = actParas(sc.paragraphs) + actList(sc.list);
+      return body || L(sc.title) ? '<section class="card act-sec">' + (L(sc.title) ? "<h2>" + esc(L(sc.title)) + "</h2>" : "") + body + "</section>" : "";
+    }).join("");
+    var people = (a.contacts || []).filter(function (c) { return L(c.name) || c.phone; }).map(function (c) {
+      return "<li><span class=\"act-pn\">" + esc(L(c.name)) + (L(c.role) ? "<small>" + esc(L(c.role)) + "</small>" : "") + "</span>" +
+        (c.phone ? '<a class="call" href="' + telHref(c.phone) + '">' + esc(c.phone) + "</a>" : "") + "</li>";
+    }).join("");
+    var formOk = /^https?:\/\//i.test(a.formUrl || "");
+    var contact = '<section class="card act-sec act-contact"><h2>' + esc(t("act.contact_h")) + "</h2>" +
+      (L(a.contactNote) ? "<p>" + esc(L(a.contactNote)) + "</p>" : "") +
+      (people ? '<ul class="act-people">' + people + "</ul>" : "") +
+      '<div class="btn-row">' +
+      (formOk ? '<a class="btn btn-primary" target="_blank" rel="noopener" href="' + esc(a.formUrl) + '">' + esc(L(a.formText) || yojanaText("formText", "y.form")) + "</a>" : "") +
+      (people ? "" : '<a class="btn btn-line" href="team.html">' + esc(L(a.contactText) || t("y.common_contact")) + "</a>") +
+      "</div></section>";
+    var poster = a.poster ? '<figure class="act-poster"><a href="' + esc(a.poster) + '" target="_blank" rel="noopener"><img src="' + esc(a.poster) + '" alt="' + esc(L(a.title)) + '"></a>' +
+      "<figcaption>" + esc(t("act.poster_hint")) + "</figcaption></figure>" : "";
+    var empty = !paras && !list && !facts && !secs;
+    host.innerHTML = '<div class="act-layout' + (poster ? " has-poster" : "") + '">' + poster + '<div class="act-body">' +
+      (soon ? '<span class="chip chip-soon">' + esc(t("act.soon")) + "</span>" : "") +
+      (soon && empty ? '<p class="act-soon-text">' + esc(t("act.soon_text")) + "</p>" : "") +
+      (facts ? '<dl class="card act-facts">' + facts + "</dl>" : "") +
+      (paras || list ? '<div class="card act-sec">' + paras + list + "</div>" : "") + secs + contact + "</div></div>";
   }
 
   /* ---------- karyakram + calendar ---------- */
