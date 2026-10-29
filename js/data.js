@@ -311,6 +311,9 @@ window.YOJANA_PAGE = {
    banner      one bright slogan line, {hi,en}.
    info        quick facts: { icon: "📅", label: {hi,en}, value: {hi,en} },  e.g. When / Where / Fee.
    paragraphs  plain text paragraphs.      list   bullet points.
+   HIDE / REMOVE / ADD: every info line, section box, list line, paragraph and contact person can have  hidden: true,  (hides it)
+               or be deleted (removes it) or copied (adds one more). Spare hidden boxes are already there: delete their  hidden: true,  to use them.
+   side        side: true  in a section puts that box under the poster (left side) to save scrolling. Needs a poster.
    sections    boxes with a heading: { icon: "🎮", color: "blue", title: {hi,en}, sub: {hi,en}, list: [...], paragraphs: [...], wide: true }
                color: orange, blue, purple, green, pink, gold or teal.  wide: true makes the box full width.
                Each list line can also have an icon and a time:  { icon: "🥾", time: {hi,en}, hi: "...", en: "..." }
@@ -325,10 +328,50 @@ window.ACTIVITIES = [
     title: { hi: "नेमिधाम क्रिकेट क्लब", en: "Nemidham Cricket Club" },
     short: { hi: "जल्द आ रहा है।", en: "Coming soon." },
     poster: "",
-    info: [],
+    info: [
+      { hidden: true, icon: "✨", label: { hi: "नई जानकारी 1", en: "New info 1" }, value: { hi: "यहाँ लिखें", en: "Write here" } },
+      { hidden: true, icon: "✨", label: { hi: "नई जानकारी 2", en: "New info 2" }, value: { hi: "यहाँ लिखें", en: "Write here" } },
+      { hidden: true, icon: "✨", label: { hi: "नई जानकारी 3", en: "New info 3" }, value: { hi: "यहाँ लिखें", en: "Write here" } }
+    ],
     paragraphs: [],
-    sections: [],
-    contacts: [],
+    sections: [
+      {
+        hidden: true, icon: "⭐", color: "orange",   // spare card: delete the "hidden: true," part to show it
+        title: { hi: "नया कार्ड 1", en: "New card 1" },
+        list: [
+          { hi: "यहाँ पहला बिंदु लिखें।", en: "Write the first point here." },
+          { hi: "यहाँ दूसरा बिंदु लिखें।", en: "Write the second point here." }
+        ]
+      },
+      {
+        hidden: true, icon: "⭐", color: "blue",   // spare card: delete the "hidden: true," part to show it
+        title: { hi: "नया कार्ड 2", en: "New card 2" },
+        list: [
+          { hi: "यहाँ पहला बिंदु लिखें।", en: "Write the first point here." },
+          { hi: "यहाँ दूसरा बिंदु लिखें।", en: "Write the second point here." }
+        ]
+      },
+      {
+        hidden: true, icon: "⭐", color: "green",   // spare card: delete the "hidden: true," part to show it
+        title: { hi: "नया कार्ड 3", en: "New card 3" },
+        list: [
+          { hi: "यहाँ पहला बिंदु लिखें।", en: "Write the first point here." },
+          { hi: "यहाँ दूसरा बिंदु लिखें।", en: "Write the second point here." }
+        ]
+      },
+      {
+        hidden: true, icon: "⭐", color: "pink",   // spare card: delete the "hidden: true," part to show it
+        title: { hi: "नया कार्ड 4", en: "New card 4" },
+        list: [
+          { hi: "यहाँ पहला बिंदु लिखें।", en: "Write the first point here." },
+          { hi: "यहाँ दूसरा बिंदु लिखें।", en: "Write the second point here." }
+        ]
+      }
+    ],
+    contacts: [
+      { hidden: true, name: { hi: "नाम", en: "Name" }, role: { hi: "संयोजक", en: "Coordinator" }, phone: "" },
+      { hidden: true, name: { hi: "नाम", en: "Name" }, role: { hi: "संयोजक", en: "Coordinator" }, phone: "" }
+    ],
     formUrl: ""
   },
   {
@@ -341,7 +384,8 @@ window.ACTIVITIES = [
     info: [
       { icon: "📅", label: { hi: "कब", en: "When" }, value: { hi: "हर महीने का तीसरा रविवार", en: "Third Sunday of every month" } },
       { icon: "📍", label: { hi: "कहाँ", en: "Where" }, value: { hi: "नेमिधाम से वाघोली पहाड़ी तक", en: "Nemidham to Wagholi hill" } },
-      { icon: "⏰", label: { hi: "समय", en: "Time" }, value: { hi: "सुबह 6:00 से दोपहर 3:00 बजे तक", en: "6:00 AM to 3:00 PM" } }
+      { icon: "⏰", label: { hi: "समय", en: "Time" }, value: { hi: "सुबह 6:00 से दोपहर 3:00 बजे तक", en: "6:00 AM to 3:00 PM" } },
+      { hidden: true, icon: "✨", label: { hi: "नई जानकारी 1", en: "New info 1" }, value: { hi: "यहाँ लिखें", en: "Write here" } }
     ],
     paragraphs: [
       { hi: "सुबह भगवान के चरणों में शुरुआत, दिनभर प्रकृति, मित्रता और मस्ती के साथ।", en: "Start the morning at the feet of Bhagwan, and spend the day with nature, friends and fun." },
@@ -372,7 +416,7 @@ window.ACTIVITIES = [
         ]
       },
       {
-        icon: "✨", color: "teal",
+        icon: "✨", color: "teal", side: true,
         title: { hi: "क्यों जुड़ें?", en: "Why join?" },
         list: [
           { icon: "🙏", hi: "धार्मिक ऊर्जा", en: "Spiritual energy" },
@@ -393,13 +437,31 @@ window.ACTIVITIES = [
           { icon: "🌱", hi: "प्रकृति को नुकसान नहीं", en: "No damage to nature" },
           { icon: "🤝", hi: "सब साथ रहें", en: "Stay together" }
         ]
+      },
+      {
+        hidden: true, icon: "⭐", color: "blue",   // spare card: delete the "hidden: true," part to show it
+        title: { hi: "नया कार्ड 1", en: "New card 1" },
+        list: [
+          { hi: "यहाँ पहला बिंदु लिखें।", en: "Write the first point here." },
+          { hi: "यहाँ दूसरा बिंदु लिखें।", en: "Write the second point here." }
+        ]
+      },
+      {
+        hidden: true, icon: "⭐", color: "purple",   // spare card: delete the "hidden: true," part to show it
+        title: { hi: "नया कार्ड 2", en: "New card 2" },
+        list: [
+          { hi: "यहाँ पहला बिंदु लिखें।", en: "Write the first point here." },
+          { hi: "यहाँ दूसरा बिंदु लिखें।", en: "Write the second point here." }
+        ]
       }
     ],
     contactTitle: { hi: "जो आएगा, वही यादें बनाएगा!", en: "Those who come will make the memories!" },
     contactNote: { hi: "ट्रेकिंग में जुड़ने और जानकारी के लिए संपर्क करें।", en: "To join the trek or for more information, please contact us." },
-    // To show people to call, remove the two slashes in front of the lines below and write the real name and number.
-    // contacts: [ { name: { hi: "नाम", en: "Name" }, phone: "+91 98765 43210" } ],
-    contacts: [],
+    // No contact person yet: a "Contact us" button to the Team page is shown. To show people to call, delete the
+    // "hidden: true," part of the spare line below and write the real name and phone number.
+    contacts: [
+      { hidden: true, name: { hi: "नाम", en: "Name" }, role: { hi: "संयोजक", en: "Coordinator" }, phone: "" }
+    ],
     formUrl: ""
   },
   {
@@ -408,10 +470,50 @@ window.ACTIVITIES = [
     title: { hi: "नेमिधाम तीर्थ यात्रा", en: "Nemidham Tirth Yatra" },
     short: { hi: "जल्द आ रहा है।", en: "Coming soon." },
     poster: "",
-    info: [],
+    info: [
+      { hidden: true, icon: "✨", label: { hi: "नई जानकारी 1", en: "New info 1" }, value: { hi: "यहाँ लिखें", en: "Write here" } },
+      { hidden: true, icon: "✨", label: { hi: "नई जानकारी 2", en: "New info 2" }, value: { hi: "यहाँ लिखें", en: "Write here" } },
+      { hidden: true, icon: "✨", label: { hi: "नई जानकारी 3", en: "New info 3" }, value: { hi: "यहाँ लिखें", en: "Write here" } }
+    ],
     paragraphs: [],
-    sections: [],
-    contacts: [],
+    sections: [
+      {
+        hidden: true, icon: "⭐", color: "orange",   // spare card: delete the "hidden: true," part to show it
+        title: { hi: "नया कार्ड 1", en: "New card 1" },
+        list: [
+          { hi: "यहाँ पहला बिंदु लिखें।", en: "Write the first point here." },
+          { hi: "यहाँ दूसरा बिंदु लिखें।", en: "Write the second point here." }
+        ]
+      },
+      {
+        hidden: true, icon: "⭐", color: "blue",   // spare card: delete the "hidden: true," part to show it
+        title: { hi: "नया कार्ड 2", en: "New card 2" },
+        list: [
+          { hi: "यहाँ पहला बिंदु लिखें।", en: "Write the first point here." },
+          { hi: "यहाँ दूसरा बिंदु लिखें।", en: "Write the second point here." }
+        ]
+      },
+      {
+        hidden: true, icon: "⭐", color: "green",   // spare card: delete the "hidden: true," part to show it
+        title: { hi: "नया कार्ड 3", en: "New card 3" },
+        list: [
+          { hi: "यहाँ पहला बिंदु लिखें।", en: "Write the first point here." },
+          { hi: "यहाँ दूसरा बिंदु लिखें।", en: "Write the second point here." }
+        ]
+      },
+      {
+        hidden: true, icon: "⭐", color: "pink",   // spare card: delete the "hidden: true," part to show it
+        title: { hi: "नया कार्ड 4", en: "New card 4" },
+        list: [
+          { hi: "यहाँ पहला बिंदु लिखें।", en: "Write the first point here." },
+          { hi: "यहाँ दूसरा बिंदु लिखें।", en: "Write the second point here." }
+        ]
+      }
+    ],
+    contacts: [
+      { hidden: true, name: { hi: "नाम", en: "Name" }, role: { hi: "संयोजक", en: "Coordinator" }, phone: "" },
+      { hidden: true, name: { hi: "नाम", en: "Name" }, role: { hi: "संयोजक", en: "Coordinator" }, phone: "" }
+    ],
     formUrl: ""
   },
   {
@@ -426,7 +528,8 @@ window.ACTIVITIES = [
       { icon: "📍", label: { hi: "कहाँ", en: "Where" }, value: { hi: "श्री नेमिनाथ जिनालय (मंदिर) में", en: "At Shri Neminath Jinalay (mandir)" } },
       { icon: "🪑", label: { hi: "सीटें", en: "Seats" }, value: { hi: "सीमित: केवल 10-12 बच्चे", en: "Limited: only 10-12 children" } },
       { icon: "👨‍👩‍👧", label: { hi: "पेरेंट्स", en: "Parents" }, value: { hi: "रोज़ ₹10 दें (बचत की आदत के लिए)", en: "Give ₹10 a day (to build the habit of saving)" } },
-      { icon: "🐷", label: { hi: "बच्चे", en: "Children" }, value: { hi: "हर हफ्ते ₹50 जमा करें (किटी जैसी सेविंग)", en: "Deposit ₹50 every week (kitty-style savings)" } }
+      { icon: "🐷", label: { hi: "बच्चे", en: "Children" }, value: { hi: "हर हफ्ते ₹50 जमा करें (किटी जैसी सेविंग)", en: "Deposit ₹50 every week (kitty-style savings)" } },
+      { hidden: true, icon: "✨", label: { hi: "नई जानकारी 1", en: "New info 1" }, value: { hi: "यहाँ लिखें", en: "Write here" } }
     ],
     paragraphs: [
       { hi: "यह आयोजन श्री नेमिनाथ जिनालय (मंदिर) में हर शनिवार शाम होगा।", en: "This gathering is held at Shri Neminath Jinalay (mandir) every Saturday evening." },
@@ -469,12 +572,28 @@ window.ACTIVITIES = [
         ]
       },
       {
-        icon: "🎁", color: "pink",
+        icon: "🎁", color: "pink", side: true,
         title: { hi: "हर हफ्ते की ख़ास बातें", en: "Every week" },
         list: [
           { icon: "🏠", hi: "हर हफ्ते नया प्रायोजक (पेरेंट होस्ट)", en: "A new sponsor every week (parent host)" },
           { icon: "🥛", hi: "मस्ती के बाद ताज़ा दूध/जूस (हेल्दी ड्रिंक)", en: "Fresh milk or juice after the fun (healthy drink)" },
           { icon: "🏆", hi: "खेलों में जीतें आकर्षक गिफ्ट्स (हर हफ्ते)", en: "Win attractive gifts in the games (every week)" }
+        ]
+      },
+      {
+        hidden: true, icon: "⭐", color: "teal",   // spare card: delete the "hidden: true," part to show it
+        title: { hi: "नया कार्ड 1", en: "New card 1" },
+        list: [
+          { hi: "यहाँ पहला बिंदु लिखें।", en: "Write the first point here." },
+          { hi: "यहाँ दूसरा बिंदु लिखें।", en: "Write the second point here." }
+        ]
+      },
+      {
+        hidden: true, icon: "⭐", color: "green",   // spare card: delete the "hidden: true," part to show it
+        title: { hi: "नया कार्ड 2", en: "New card 2" },
+        list: [
+          { hi: "यहाँ पहला बिंदु लिखें।", en: "Write the first point here." },
+          { hi: "यहाँ दूसरा बिंदु लिखें।", en: "Write the second point here." }
         ]
       }
     ],
@@ -483,7 +602,8 @@ window.ACTIVITIES = [
     contacts: [
       { name: { hi: "सौरभ जैन", en: "Saurabh Jain" }, phone: "7987070139" },
       { name: { hi: "अभिषेक जैन", en: "Abhishek Jain" }, phone: "8308803431" },
-      { name: { hi: "दीपक जैन", en: "Deepak Jain" }, phone: "9928218313" }
+      { name: { hi: "दीपक जैन", en: "Deepak Jain" }, phone: "9928218313" },
+      { hidden: true, name: { hi: "नाम", en: "Name" }, role: { hi: "संयोजक", en: "Coordinator" }, phone: "" }
     ],
     formUrl: ""
   }

@@ -531,7 +531,7 @@
      window.ACTIVITIES (data.js): poster picture, quick facts, text, sections, contact people, form link. */
   var ACT_COLORS = { orange: 1, blue: 1, purple: 1, green: 1, pink: 1, gold: 1, teal: 1 };
   function actList(items) {
-    var li = (items || []).filter(function (x) { return L(x); }).map(function (x) {
+    var li = vis(items).filter(function (x) { return L(x); }).map(function (x) {
       var ic = x.icon ? '<span class="li-ic" aria-hidden="true">' + esc(x.icon) + "</span>" : "";
       var tm = L(x.time) ? '<span class="li-tm">' + esc(L(x.time)) + "</span>" : "";
       return '<li class="' + (x.icon ? "has-ic" : "") + (tm ? " has-tm" : "") + '">' + ic + tm + "<span>" + esc(L(x)) + "</span></li>";
@@ -539,7 +539,7 @@
     return li ? "<ul>" + li + "</ul>" : "";
   }
   function actParas(items) {
-    return (items || []).filter(function (x) { return L(x); }).map(function (x) { return "<p>" + esc(L(x)) + "</p>"; }).join("");
+    return vis(items).filter(function (x) { return L(x); }).map(function (x) { return "<p>" + esc(L(x)) + "</p>"; }).join("");
   }
   function renderActivityPage() {
     var host = document.getElementById("activity"); if (!host) return;
@@ -552,18 +552,21 @@
     var decor = String(a.decor || "").split(/\s+/).filter(Boolean).map(function (e, k) {
       return '<span style="animation-delay:' + (k * 0.25) + 's">' + esc(e) + "</span>";
     }).join("");
-    var facts = (a.info || []).filter(function (i) { return L(i.value); }).map(function (i) {
+    var facts = vis(a.info).filter(function (i) { return L(i.value); }).map(function (i) {
       return '<div class="act-fact"><span class="ic" aria-hidden="true">' + esc(i.icon || "✨") + "</span><div><dt>" + esc(L(i.label)) + "</dt><dd>" + esc(L(i.value)) + "</dd></div></div>";
     }).join("");
-    var secs = (a.sections || []).map(function (sc) {
+    function secHtml(sc) {
       var body = actParas(sc.paragraphs) + actList(sc.list);
       if (!body && !L(sc.title)) return "";
       var c = ACT_COLORS[sc.color] ? sc.color : "gold";
       return '<section class="card act-sec c-' + c + (sc.wide ? " wide" : "") + '">' +
         (L(sc.title) ? "<h2>" + (sc.icon ? '<span class="ic" aria-hidden="true">' + esc(sc.icon) + "</span>" : "") + "<span>" + esc(L(sc.title)) + "</span></h2>" : "") +
         (L(sc.sub) ? '<p class="sub-line">' + esc(L(sc.sub)) + "</p>" : "") + body + "</section>";
-    }).join("");
-    var people = (a.contacts || []).filter(function (c) { return L(c.name) || c.phone; }).map(function (c) {
+    }
+    var allSecs = vis(a.sections);
+    var secs = allSecs.filter(function (sc) { return !(sc.side && a.poster); }).map(secHtml).join("");
+    var sideSecs = allSecs.filter(function (sc) { return sc.side && a.poster; }).map(secHtml).join("");
+    var people = vis(a.contacts).filter(function (c) { return L(c.name) || c.phone; }).map(function (c) {
       return "<li><span class=\"act-pn\">" + esc(L(c.name)) + (L(c.role) ? "<small>" + esc(L(c.role)) + "</small>" : "") + "</span>" +
         (c.phone ? '<a class="call-btn" href="' + telHref(c.phone) + '"><span aria-hidden="true">📞</span> ' + esc(c.phone) + "</a>" : "") + "</li>";
     }).join("");
@@ -577,15 +580,21 @@
       "</div></section>";
     var poster = a.poster ? '<figure class="act-poster"><a href="' + esc(a.poster) + '" target="_blank" rel="noopener"><img src="' + esc(a.poster) + '" alt="' + esc(L(a.title)) + '"></a>' +
       "<figcaption>" + esc(t("act.poster_hint")) + "</figcaption></figure>" : "";
-    var empty = !paras && !list && !facts && !secs;
-    host.innerHTML = '<div class="act-layout' + (poster ? " has-poster" : "") + '">' + poster + '<div class="act-body">' +
+    var empty = !paras && !list && !facts && !secs && !sideSecs;
+    var bodyHtml =
       (soon ? '<span class="chip chip-soon">' + esc(t("act.soon")) + "</span>" : "") +
       (decor ? '<div class="act-decor" aria-hidden="true">' + decor + "</div>" : "") +
       (L(a.banner) ? '<p class="act-ribbon">' + esc(L(a.banner)) + "</p>" : "") +
       (soon && empty ? '<p class="act-soon-text">' + esc(t("act.soon_text")) + "</p>" : "") +
       (facts ? '<dl class="act-facts">' + facts + "</dl>" : "") +
       (paras || list ? '<div class="card act-sec c-gold wide act-intro">' + paras + list + "</div>" : "") +
-      (secs ? '<div class="act-secs">' + secs + "</div>" : "") + contact + "</div></div>";
+      (secs ? '<div class="act-secs">' + secs + "</div>" : "");
+    if (poster) {
+      host.innerHTML = '<div class="act-layout has-poster"><div class="act-left">' + poster + '<div class="act-side">' + sideSecs + contact + "</div></div>" +
+        '<div class="act-body">' + bodyHtml + "</div></div>";
+    } else {
+      host.innerHTML = '<div class="act-layout"><div class="act-body">' + bodyHtml + (sideSecs ? '<div class="act-secs">' + sideSecs + "</div>" : "") + contact + "</div></div>";
+    }
   }
 
   /* ---------- karyakram + calendar ---------- */
