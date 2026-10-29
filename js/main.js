@@ -529,8 +529,13 @@
   /* ---------- activities (menu: Nemidham Cricket Club, Trekking, ...) ----------
      Each activity has its own page (kids-club.html, trekking.html, ...). The page reads its block in
      window.ACTIVITIES (data.js): poster picture, quick facts, text, sections, contact people, form link. */
+  var ACT_COLORS = { orange: 1, blue: 1, purple: 1, green: 1, pink: 1, gold: 1, teal: 1 };
   function actList(items) {
-    var li = (items || []).filter(function (x) { return L(x); }).map(function (x) { return "<li>" + esc(L(x)) + "</li>"; }).join("");
+    var li = (items || []).filter(function (x) { return L(x); }).map(function (x) {
+      var ic = x.icon ? '<span class="li-ic" aria-hidden="true">' + esc(x.icon) + "</span>" : "";
+      var tm = L(x.time) ? '<span class="li-tm">' + esc(L(x.time)) + "</span>" : "";
+      return '<li class="' + (x.icon ? "has-ic" : "") + (tm ? " has-tm" : "") + '">' + ic + tm + "<span>" + esc(L(x)) + "</span></li>";
+    }).join("");
     return li ? "<ul>" + li + "</ul>" : "";
   }
   function actParas(items) {
@@ -544,19 +549,26 @@
     setHead(L(a.title), L(a.short));
     var soon = a.comingSoon !== false;
     var paras = actParas(a.paragraphs), list = actList(a.list);
+    var decor = String(a.decor || "").split(/\s+/).filter(Boolean).map(function (e, k) {
+      return '<span style="animation-delay:' + (k * 0.25) + 's">' + esc(e) + "</span>";
+    }).join("");
     var facts = (a.info || []).filter(function (i) { return L(i.value); }).map(function (i) {
-      return "<div><dt>" + esc(L(i.label)) + "</dt><dd>" + esc(L(i.value)) + "</dd></div>";
+      return '<div class="act-fact"><span class="ic" aria-hidden="true">' + esc(i.icon || "✨") + "</span><div><dt>" + esc(L(i.label)) + "</dt><dd>" + esc(L(i.value)) + "</dd></div></div>";
     }).join("");
     var secs = (a.sections || []).map(function (sc) {
       var body = actParas(sc.paragraphs) + actList(sc.list);
-      return body || L(sc.title) ? '<section class="card act-sec">' + (L(sc.title) ? "<h2>" + esc(L(sc.title)) + "</h2>" : "") + body + "</section>" : "";
+      if (!body && !L(sc.title)) return "";
+      var c = ACT_COLORS[sc.color] ? sc.color : "gold";
+      return '<section class="card act-sec c-' + c + (sc.wide ? " wide" : "") + '">' +
+        (L(sc.title) ? "<h2>" + (sc.icon ? '<span class="ic" aria-hidden="true">' + esc(sc.icon) + "</span>" : "") + "<span>" + esc(L(sc.title)) + "</span></h2>" : "") +
+        (L(sc.sub) ? '<p class="sub-line">' + esc(L(sc.sub)) + "</p>" : "") + body + "</section>";
     }).join("");
     var people = (a.contacts || []).filter(function (c) { return L(c.name) || c.phone; }).map(function (c) {
       return "<li><span class=\"act-pn\">" + esc(L(c.name)) + (L(c.role) ? "<small>" + esc(L(c.role)) + "</small>" : "") + "</span>" +
-        (c.phone ? '<a class="call" href="' + telHref(c.phone) + '">' + esc(c.phone) + "</a>" : "") + "</li>";
+        (c.phone ? '<a class="call-btn" href="' + telHref(c.phone) + '"><span aria-hidden="true">📞</span> ' + esc(c.phone) + "</a>" : "") + "</li>";
     }).join("");
     var formOk = /^https?:\/\//i.test(a.formUrl || "");
-    var contact = '<section class="card act-sec act-contact"><h2>' + esc(t("act.contact_h")) + "</h2>" +
+    var contact = '<section class="card act-sec act-contact c-green wide"><h2><span class="ic" aria-hidden="true">🎉</span><span>' + esc(L(a.contactTitle) || t("act.contact_h")) + "</span></h2>" +
       (L(a.contactNote) ? "<p>" + esc(L(a.contactNote)) + "</p>" : "") +
       (people ? '<ul class="act-people">' + people + "</ul>" : "") +
       '<div class="btn-row">' +
@@ -568,9 +580,12 @@
     var empty = !paras && !list && !facts && !secs;
     host.innerHTML = '<div class="act-layout' + (poster ? " has-poster" : "") + '">' + poster + '<div class="act-body">' +
       (soon ? '<span class="chip chip-soon">' + esc(t("act.soon")) + "</span>" : "") +
+      (decor ? '<div class="act-decor" aria-hidden="true">' + decor + "</div>" : "") +
+      (L(a.banner) ? '<p class="act-ribbon">' + esc(L(a.banner)) + "</p>" : "") +
       (soon && empty ? '<p class="act-soon-text">' + esc(t("act.soon_text")) + "</p>" : "") +
-      (facts ? '<dl class="card act-facts">' + facts + "</dl>" : "") +
-      (paras || list ? '<div class="card act-sec">' + paras + list + "</div>" : "") + secs + contact + "</div></div>";
+      (facts ? '<dl class="act-facts">' + facts + "</dl>" : "") +
+      (paras || list ? '<div class="card act-sec c-gold wide act-intro">' + paras + list + "</div>" : "") +
+      (secs ? '<div class="act-secs">' + secs + "</div>" : "") + contact + "</div></div>";
   }
 
   /* ---------- karyakram + calendar ---------- */
