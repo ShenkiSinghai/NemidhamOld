@@ -92,7 +92,7 @@ window.SITE = {
   //             Set true if you'd rather it mix the photos up differently on every visit.
   //   count     how many photos to pull into the strip.
   //   seconds   how many seconds between each automatic scroll.
-  slideshow: { enabled: true, source: "kshamavani-2026", shuffle: true, count: 25, seconds: 3 },
+  slideshow: { enabled: true, source: "kshamavani-2026", shuffle: false, count: "all", seconds: 3 },
 
   // Shantidhara punyarjak table (Daan page): true shows only the current month's names.
   // Set to false if you want last/next month's names to stay visible too.
@@ -330,6 +330,12 @@ window.CALENDAR = [
 window.GALLERY = {
   photos: [
     {
+      id: "bhumipujan", date: "2026-05-08",
+      title: { hi: "भूमि पूजन", en: "Bhumi Pujan" },
+      description: { hi: "", en: "" },
+      folder: "images/gallery/Bhumi Pujan",
+    },
+     {
       id: "vedi-pratishtha", date: "2026-05-09",
       title: { hi: "वेदी प्रतिष्ठा", en: "Vedi Pratishtha" },
       description: { hi: "", en: "" },
