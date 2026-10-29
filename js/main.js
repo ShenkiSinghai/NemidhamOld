@@ -559,7 +559,13 @@
 
   function galleryList(kind) {
     var G = window.GALLERY || {};
-    return vis(G[kind]).slice().sort(function (a, b) { return (a.date || "") < (b.date || "") ? 1 : -1; });
+    var oldestFirst = S.albumOrder === "oldest";
+    return vis(G[kind]).slice().sort(function (a, b) {
+      if ((a.date || "") === (b.date || "")) return 0;
+      if (!a.date) return 1;
+      if (!b.date) return -1;
+      return ((a.date || "") < (b.date || "")) === oldestFirst ? -1 : 1;
+    });
   }
   function fileUrl(folder, name) {
     var base = String(folder || "").replace(/^\/+|\/+$/g, "");
