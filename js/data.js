@@ -98,6 +98,9 @@ window.SITE = {
   // Set to false if you want last/next month's names to stay visible too.
   punyarjakCurrentMonthOnly: true,
 
+  // Gallery mein albums ka order: "newest" = latest pehle, "oldest" = purana pehle
+     albumOrder: "newest",
+
   // Karyakram older than this many days drop off the "Past" tab. Use -1 to keep them all.
   karyakramPastDays: 30,
 
