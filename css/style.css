@@ -570,7 +570,16 @@ footer.site a.ficon:hover, .ficon:hover { background: var(--gold-soft); color: v
 /* ---------- Activities menu tag, activity pages ---------- */
 nav a small { background: var(--mist); color: var(--ink-2); border-radius: 999px; padding: 1px 9px; font-size: .74rem; font-weight: 600; margin-left: 10px; white-space: nowrap; }
 .act-layout { display: grid; gap: 24px; align-items: start; }
-@media (min-width: 880px) { .act-layout.has-poster { grid-template-columns: minmax(300px, 420px) 1fr; gap: 32px; } }
+.act-left { display: contents; }
+.act-layout.has-poster .act-poster { order: 1; }
+.act-layout.has-poster .act-body { order: 2; }
+.act-layout.has-poster .act-side { order: 3; }
+@media (min-width: 880px) {
+  .act-layout.has-poster { grid-template-columns: minmax(300px, 420px) 1fr; gap: 32px; }
+  .act-left { display: grid; gap: 24px; align-content: start; min-width: 0; }
+  .act-layout.has-poster .act-poster, .act-layout.has-poster .act-body, .act-layout.has-poster .act-side { order: 0; }
+}
+.act-side { display: grid; gap: 16px; min-width: 0; }
 .act-poster { margin: 0; }
 .act-poster a { display: block; background: #fff; padding: 10px; border-radius: 16px; box-shadow: 0 10px 26px var(--shadow); transform: rotate(-1.2deg); transition: transform .25s ease; }
 .act-poster a:hover { transform: rotate(0) scale(1.01); }
@@ -599,8 +608,8 @@ nav a small { background: var(--mist); color: var(--ink-2); border-radius: 999px
 .act-sec .sub-line { margin: -6px 0 10px; color: var(--muted); font-weight: 600; }
 .act-sec p { margin: 0 0 10px; }
 .act-sec ul { margin: 0; padding: 0; list-style: none; }
-.act-sec li { position: relative; padding: 5px 0 5px 26px; }
-.act-sec li::before { content: "✔"; position: absolute; left: 0; top: 5px; color: var(--ac); font-weight: 700; }
+.act-sec li { position: relative; padding: 3px 0 3px 26px; }
+.act-sec li::before { content: "✔"; position: absolute; left: 0; top: 3px; color: var(--ac); font-weight: 700; }
 .act-sec li.has-ic, .act-sec li.has-tm { padding-left: 0; display: flex; align-items: baseline; gap: 10px; flex-wrap: nowrap; }
 .act-sec li.has-ic > span:last-child, .act-sec li.has-tm > span:last-child { flex: 1; min-width: 0; }
 @media (max-width: 560px) { .act-sec li.has-tm { flex-wrap: wrap; } .act-sec li.has-tm > span:last-child { flex-basis: 100%; padding-left: 32px; } }
