@@ -218,6 +218,28 @@ window.YOJANA = [
     target: "", raised: ""
   },
   {
+    id: "jain-society",
+    pinned: true,
+    status: "active",
+    title: { hi: "नेमिधाम में आगामी जैन सोसायटी (फ्लैट्स)", en: "Upcoming Jain Society (Flats) at Nemidham" },
+    short: {
+      hi: "नेमिधाम में 150 फ्लैट की जैन सोसायटी बनाने का प्रयास।",
+      en: "Efforts to build a Jain society of 150 flats at Nemidham."
+    },
+    summary: {
+      hi: "नेमिधाम में जैन सोसायटी (फ्लैट्स) बनाने के लिए प्रयास किए जा रहे हैं। सोसायटी में 150 फ्लैट होंगे।",
+      en: "Efforts are on to build a Jain society (flats) at Nemidham. The society will have 150 flats."
+    },
+    details: [
+      { hi: "योजना 150 फ्लैट की सोसायटी की है।", en: "The plan is for a society of 150 flats." },
+      { hi: "अब तक लगभग 70 लोगों ने अपनी रुचि दर्शाई है।", en: "About 70 people have shown interest so far." },
+      { hi: "150 रुचि आने पर इस पर आगे कार्य शुरू किया जाएगा।", en: "Work will move ahead once 150 people have shown interest." },
+      { hi: "जानकारी के लिए सौरभ जैन और नीलेश जैन से संपर्क करें। उनके नंबर टीम पेज पर मिल जाएंगे।", en: "For details, please contact Saurabh Jain and Neelesh Jain. Their numbers are on the Team page." }
+    ],
+    target: "", raised: "",
+    formUrl: "https://forms.gle/NcoF3N6NF8j9S11j6"
+  },
+  {
     id: "dharmshala",
     pinned: true,
     status: "soon",
@@ -313,9 +335,9 @@ window.YOJANA_PAGE = {
    paragraphs  plain text paragraphs.      list   bullet points.
    HIDE / REMOVE / ADD: every info line, section box, list line, paragraph and contact person can have  hidden: true,  (hides it)
                or be deleted (removes it) or copied (adds one more). Spare hidden boxes are already there: delete their  hidden: true,  to use them.
-   side        side: true  in a section puts that box under the poster (left side) to save scrolling. Needs a poster.
-   sections    boxes with a heading: { icon: "🎮", color: "blue", title: {hi,en}, sub: {hi,en}, list: [...], paragraphs: [...], wide: true }
+   sections    boxes with a heading, shown in this order, in neat rows: { icon: "🎮", color: "blue", title: {hi,en}, sub: {hi,en}, list: [...], paragraphs: [...], wide: true }
                color: orange, blue, purple, green, pink, gold or teal.  wide: true makes the box full width.
+               The Contact box always comes last, by itself.
                Each list line can also have an icon and a time:  { icon: "🥾", time: {hi,en}, hi: "...", en: "..." }
    contacts    people to call: { name: {hi,en}, role: {hi,en}, phone: "+91 98765 43210" }.
                If there are none, a "Contact us" button to the Team page is shown instead.
@@ -323,20 +345,48 @@ window.YOJANA_PAGE = {
    formUrl     optional Google Form link. Paste it between the quotes and a button appears. formText = its words.  */
 window.ACTIVITIES = [
   {
-    id: "cricket-club", page: "cricket-club.html", comingSoon: true,
-    decor: "🏏 ⚾ 🏆 🧢",
+    id: "cricket-club", page: "cricket-club.html", comingSoon: false,
+    decor: "🏏 ⚾ 🏆 🧢 🥤",
+    banner: { hi: "खेलेंगे साथ, बढ़ेगा अपनापन!", en: "We play together, our bond grows!" },
     title: { hi: "नेमिधाम क्रिकेट क्लब", en: "Nemidham Cricket Club" },
-    short: { hi: "जल्द आ रहा है।", en: "Coming soon." },
-    poster: "",
+    short: { hi: "खेल से स्वास्थ्य, परिवार से जुड़ाव, और समाज से अपनापन।", en: "Health through sport, bonding through family, belonging through community." },
+    poster: "images/activities/cricket-club.jpeg",
     info: [
-      { hidden: true, icon: "✨", label: { hi: "नई जानकारी 1", en: "New info 1" }, value: { hi: "यहाँ लिखें", en: "Write here" } },
-      { hidden: true, icon: "✨", label: { hi: "नई जानकारी 2", en: "New info 2" }, value: { hi: "यहाँ लिखें", en: "Write here" } },
-      { hidden: true, icon: "✨", label: { hi: "नई जानकारी 3", en: "New info 3" }, value: { hi: "यहाँ लिखें", en: "Write here" } }
+      { icon: "📍", label: { hi: "कहाँ", en: "Where" }, value: { hi: "नेमिधाम टर्फ, वाघोली, पुणे", en: "Nemidham Turf, Wagholi, Pune" } },
+      { icon: "🏆", label: { hi: "प्रकार", en: "Type" }, value: { hi: "टूर्नामेंट आधारित कार्यक्रम", en: "Tournament based events" } },
+      { hidden: true, icon: "📅", label: { hi: "कब", en: "When" }, value: { hi: "यहाँ लिखें", en: "Write here" } },
+      { hidden: true, icon: "✨", label: { hi: "नई जानकारी", en: "New info" }, value: { hi: "यहाँ लिखें", en: "Write here" } }
     ],
-    paragraphs: [],
+    paragraphs: [
+      { hi: "खेलो, जुड़ो, फिट रहो और साथ रहो।", en: "Play, bond, stay fit and be together." },
+      { hi: "अच्छा खेल, बेहतर समाज, मजबूत नेमिधाम!", en: "Good sport, a better society, a stronger Nemidham!" }
+    ],
     sections: [
       {
-        hidden: true, icon: "⭐", color: "orange",   // spare card: delete the "hidden: true," part to show it
+        icon: "🏆", color: "orange",
+        title: { hi: "टूर्नामेंट आधारित कार्यक्रम", en: "Tournament based events" },
+        list: [
+          { hi: "क्रिकेट मैच", en: "Cricket matches" },
+          { hi: "लीग", en: "Leagues" },
+          { hi: "विशेष कार्यक्रम", en: "Special events" },
+          { hi: "फैमिली क्रिकेट डेज़", en: "Family cricket days" }
+        ]
+      },
+      {
+        icon: "🏏", color: "green",
+        title: { hi: "हमारे कार्यक्रम", en: "Our programmes" },
+        list: [
+          { icon: "🏆", hi: "लीग मैचेस (टीम आधारित मैच)", en: "League matches (team based)" },
+          { icon: "🏏", hi: "फ्रेंडली मैचेस (सभी उम्र के लिए)", en: "Friendly matches (for all ages)" },
+          { icon: "🧒", hi: "किड्स क्रिकेट (बच्चों के लिए विशेष सत्र)", en: "Kids cricket (special sessions for children)" },
+          { icon: "👨‍👩‍👧‍👦", hi: "फैमिली क्रिकेट (परिवार के साथ खेलें, जुड़ें और आनंद लें)", en: "Family cricket (play, bond and enjoy with the family)" },
+          { icon: "🎮", hi: "टीम गेम्स और फन एक्टिविटीज़ (सभी के लिए मनोरंजक खेल)", en: "Team games and fun activities (entertaining games for everyone)" },
+          { icon: "🥤", hi: "रिफ्रेशमेंट्स (नाश्ता, ठंडे पेय और साथ बैठकी)", en: "Refreshments (snacks, cold drinks and sitting together)" },
+          { icon: "🤝", hi: "सामुदायिक मिलन (खेल के साथ मित्रता और नेटवर्किंग)", en: "Community meet (friendship and networking along with sport)" }
+        ]
+      },
+      {
+        hidden: true, icon: "⭐", color: "blue",   // spare card: delete the "hidden: true," part to show it
         title: { hi: "नया कार्ड 1", en: "New card 1" },
         list: [
           { hi: "यहाँ पहला बिंदु लिखें।", en: "Write the first point here." },
@@ -344,33 +394,20 @@ window.ACTIVITIES = [
         ]
       },
       {
-        hidden: true, icon: "⭐", color: "blue",   // spare card: delete the "hidden: true," part to show it
+        hidden: true, icon: "⭐", color: "purple",   // spare card: delete the "hidden: true," part to show it
         title: { hi: "नया कार्ड 2", en: "New card 2" },
-        list: [
-          { hi: "यहाँ पहला बिंदु लिखें।", en: "Write the first point here." },
-          { hi: "यहाँ दूसरा बिंदु लिखें।", en: "Write the second point here." }
-        ]
-      },
-      {
-        hidden: true, icon: "⭐", color: "green",   // spare card: delete the "hidden: true," part to show it
-        title: { hi: "नया कार्ड 3", en: "New card 3" },
-        list: [
-          { hi: "यहाँ पहला बिंदु लिखें।", en: "Write the first point here." },
-          { hi: "यहाँ दूसरा बिंदु लिखें।", en: "Write the second point here." }
-        ]
-      },
-      {
-        hidden: true, icon: "⭐", color: "pink",   // spare card: delete the "hidden: true," part to show it
-        title: { hi: "नया कार्ड 4", en: "New card 4" },
         list: [
           { hi: "यहाँ पहला बिंदु लिखें।", en: "Write the first point here." },
           { hi: "यहाँ दूसरा बिंदु लिखें।", en: "Write the second point here." }
         ]
       }
     ],
+    contactTitle: { hi: "क्रिकेट से जुड़ें, नेमिधाम से जुड़ें!", en: "Join cricket, join Nemidham!" },
+    contactNote: { hi: "जुड़ने और जानकारी के लिए संपर्क करें:", en: "To join or for more information, please contact:" },
     contacts: [
-      { hidden: true, name: { hi: "नाम", en: "Name" }, role: { hi: "संयोजक", en: "Coordinator" }, phone: "" },
-      { hidden: true, name: { hi: "नाम", en: "Name" }, role: { hi: "संयोजक", en: "Coordinator" }, phone: "" }
+      { name: { hi: "दीपक जैन", en: "Deepak Jain" }, phone: "9928218313" },
+      { name: { hi: "स्वप्निल जैन", en: "Swapnil Jain" }, phone: "9405197463" },
+      { hidden: true, name: { hi: "नाम", en: "Name" }, role: { hi: "संयोजक", en: "Coordinator" }, phone: "" }   // spare: delete "hidden: true," to use
     ],
     formUrl: ""
   },
@@ -416,7 +453,7 @@ window.ACTIVITIES = [
         ]
       },
       {
-        icon: "✨", color: "teal", side: true,
+        icon: "✨", color: "teal",
         title: { hi: "क्यों जुड़ें?", en: "Why join?" },
         list: [
           { icon: "🙏", hi: "धार्मिक ऊर्जा", en: "Spiritual energy" },
@@ -457,17 +494,16 @@ window.ACTIVITIES = [
     ],
     contactTitle: { hi: "जो आएगा, वही यादें बनाएगा!", en: "Those who come will make the memories!" },
     contactNote: { hi: "ट्रेकिंग में जुड़ने और जानकारी के लिए संपर्क करें।", en: "To join the trek or for more information, please contact us." },
-    // No contact person yet: a "Contact us" button to the Team page is shown. To show people to call, delete the
-    // "hidden: true," part of the spare line below and write the real name and phone number.
     contacts: [
-      { hidden: true, name: { hi: "नाम", en: "Name" }, role: { hi: "संयोजक", en: "Coordinator" }, phone: "" }
+      { name: { hi: "निरंजन जैन", en: "Niranjan Jain" }, phone: "9834507342" },
+      { hidden: true, name: { hi: "नाम", en: "Name" }, role: { hi: "संयोजक", en: "Coordinator" }, phone: "" }   // spare: delete "hidden: true," to use
     ],
     formUrl: ""
   },
   {
     id: "tirth-yatra", page: "tirth-yatra.html", comingSoon: true,
     decor: "🛕 🚌 🙏 🌄",
-    title: { hi: "नेमिधाम तीर्थ यात्रा", en: "Nemidham Tirth Yatra" },
+    title: { hi: "नेमिधाम यात्रा संघ", en: "Nemidham Yatra Sangh" },
     short: { hi: "जल्द आ रहा है।", en: "Coming soon." },
     poster: "",
     info: [
@@ -572,7 +608,7 @@ window.ACTIVITIES = [
         ]
       },
       {
-        icon: "🎁", color: "pink", side: true,
+        icon: "🎁", color: "pink",
         title: { hi: "हर हफ्ते की ख़ास बातें", en: "Every week" },
         list: [
           { icon: "🏠", hi: "हर हफ्ते नया प्रायोजक (पेरेंट होस्ट)", en: "A new sponsor every week (parent host)" },
@@ -600,10 +636,8 @@ window.ACTIVITIES = [
     contactTitle: { hi: "जुड़ें हमारे साथ!", en: "Join us!" },
     contactNote: { hi: "सीमित सीटें (केवल 10-12 बच्चे)। नाम दर्ज कराने व जानकारी हेतु संपर्क करें:", en: "Limited seats (only 10-12 children). To register your child or for information, please contact:" },
     contacts: [
-      { name: { hi: "सौरभ जैन", en: "Saurabh Jain" }, phone: "7987070139" },
       { name: { hi: "अभिषेक जैन", en: "Abhishek Jain" }, phone: "8308803431" },
-      { name: { hi: "दीपक जैन", en: "Deepak Jain" }, phone: "9928218313" },
-      { hidden: true, name: { hi: "नाम", en: "Name" }, role: { hi: "संयोजक", en: "Coordinator" }, phone: "" }
+      { hidden: true, name: { hi: "नाम", en: "Name" }, role: { hi: "संयोजक", en: "Coordinator" }, phone: "" }   // spare: delete "hidden: true," to use
     ],
     formUrl: ""
   }
@@ -885,6 +919,58 @@ window.HOWTO = [
   }
 ];
 
+/* ---------- 10क. Suvidhayen (facilities of the mandir) ----------
+   Shown on its own page (menu: Mandir > Suvidhayen). One card per facility.
+   TO ADD: copy one whole { ... }, block, paste it after the last one, change the text.  TO REMOVE: delete it.
+   TO HIDE: add  hidden: true,  inside it.  Three spare hidden cards are at the end: delete their "hidden: true," to use them.
+   pinned: true   also shows a small card for it on the Home page (next to "Give daan" and "Visit the mandir"). Keep it to one or two.
+   icon (one emoji), color (orange, blue, purple, green, pink, gold, teal), title, short (one line, used on the Home card),
+   paragraphs, info: [ { icon, label: {hi,en}, value: {hi,en} } ], list: [ {hi,en} ],
+   contactNote (one line above the people), contacts: [ { name: {hi,en}, role: {hi,en}, phone: "..." } ].
+   Every info line, list line and contact can also have  hidden: true. */
+window.SUVIDHA = [
+  {
+    id: "bhojanshala", pinned: true, icon: "🍽️", color: "orange",
+    title: { hi: "भोजनशाला", en: "Bhojanshala" },
+    short: { hi: "मंदिर में शुद्ध भोजन की व्यवस्था है। कूपन राशि ₹100।", en: "Pure, shuddh bhojan is available at the mandir. Coupon: ₹100." },
+    paragraphs: [
+      { hi: "मंदिर में शुद्ध भोजन की व्यवस्था है।", en: "Shuddh (pure) bhojan is arranged at the mandir." }
+    ],
+    info: [
+      { icon: "🎟️", label: { hi: "कूपन राशि", en: "Coupon amount" }, value: { hi: "₹100", en: "₹100" } }
+    ],
+    list: [],
+    contactNote: { hi: "भोजन के लिए पुजारी भैया नीरज जैन से संपर्क करें।", en: "For bhojan, please contact Pujari Neeraj Jain." },
+    contacts: [
+      { name: { hi: "नीरज जैन", en: "Neeraj Jain" }, role: { hi: "पुजारी", en: "Pujari" }, phone: "8770979624" }
+    ]
+  },
+  {
+    hidden: true, icon: "⭐", color: "blue",   // spare card: delete the "hidden: true," part to show it
+    title: { hi: "नई सुविधा 1", en: "New facility 1" },
+    paragraphs: [ { hi: "यहाँ सुविधा की जानकारी लिखें।", en: "Write the details of this facility here." } ],
+    info: [],
+    list: [],
+    contacts: []
+  },
+  {
+    hidden: true, icon: "⭐", color: "green",   // spare card: delete the "hidden: true," part to show it
+    title: { hi: "नई सुविधा 2", en: "New facility 2" },
+    paragraphs: [ { hi: "यहाँ सुविधा की जानकारी लिखें।", en: "Write the details of this facility here." } ],
+    info: [],
+    list: [],
+    contacts: []
+  },
+  {
+    hidden: true, icon: "⭐", color: "purple",   // spare card: delete the "hidden: true," part to show it
+    title: { hi: "नई सुविधा 3", en: "New facility 3" },
+    paragraphs: [ { hi: "यहाँ सुविधा की जानकारी लिखें।", en: "Write the details of this facility here." } ],
+    info: [],
+    list: [],
+    contacts: []
+  }
+];
+
 /* ---------- 11. Daan ---------- */
 // enabled: false shows "details coming soon" instead.
 // Leave a field "" to hide it. Check every detail with the trustees first.
@@ -920,7 +1006,8 @@ window.DAAN = {
    TO ADD a card: copy one whole { ... }, block, paste it after the last one, change the text.
    TO REMOVE a card: delete its whole { ... }, block.   TO HIDE it for now: add  hidden: true,  inside it.
    The last three cards ("Daan 1/2/3") are spare cards that are hidden. To use one: delete its  hidden: true,  line
-   and write your own text. Cards are shown in this order, three in a row on a computer screen. */
+   and write your own text. Cards are shown in this order, three in a row on a computer screen.
+   contacts: [ { name: {hi,en}, phone: "..." } ]  A call button with the name shows under the card once a phone number is written. */
 window.RECURRING = [
   {
     title: { hi: "मासिक द्रव्य दान", en: "Masik Dravya Daan" },
@@ -930,9 +1017,11 @@ window.RECURRING = [
       en: "Every month, items of any kind can be given as daan to the mandir, mainly pooja items. You can join too."
     },
     how: {
-      hi: "सामग्री दान करने के लिए कृपया टीम पेज पर दिए गए सदस्यों से संपर्क करें।",
-      en: "To give items as daan, please contact the members listed on the Team page."
-    }
+      hi: "सामग्री दान करने के लिए कृपया स्वप्निल जैन से संपर्क करें।",
+      en: "To give items as daan, please contact Swapnil Jain."
+    },
+    // Write the phone number between the quotes and a call button with the name appears under this card.
+    contacts: [ { name: { hi: "स्वप्निल जैन", en: "Swapnil Jain" }, phone: "" } ]
   },
   {
     title: { hi: "साप्ताहिक शांतिधारा", en: "Saptahik Shantidhara" },
@@ -944,7 +1033,9 @@ window.RECURRING = [
     how: {
       hi: "पुण्यार्जक बनने के लिए कृपया टीम पेज पर दिए गए सदस्यों से संपर्क करें।",
       en: "To become a punyarjak, please contact the members listed on the Team page."
-    }
+    },
+    // When the name is confirmed: write it and the phone number here (and change the "how" line above if you like).
+    contacts: [ { name: { hi: "नाम", en: "Name" }, phone: "" } ]
   },
   {
     title: { hi: "मासिक शांतिधारा", en: "Masik Shantidhara" },
@@ -956,7 +1047,22 @@ window.RECURRING = [
     how: {
       hi: "पुण्यार्जक बनने के लिए कृपया टीम पेज पर दिए गए सदस्यों से संपर्क करें।",
       en: "To become a punyarjak, please contact the members listed on the Team page."
-    }
+    },
+    // When the name is confirmed: write it and the phone number here (and change the "how" line above if you like).
+    contacts: [ { name: { hi: "नाम", en: "Name" }, phone: "" } ]
+  },
+  {
+    title: { hi: "मासिक भक्तामर भक्ति", en: "Masik Bhaktamber Bhakti" },
+    when: { hi: "हर महीने के दूसरे रविवार", en: "Second Sunday of every month" },
+    text: {
+      hi: "हर महीने कोई भी परिवार अपना नाम देकर उस महीने के भक्तामर पाठ का पुण्यार्जन कर सकता है। यह पाठ महीने के दूसरे रविवार को होता है।",
+      en: "Every month, any family can give its name and earn the punyarjan of that month's Bhaktamber path. The path is held on the second Sunday of the month."
+    },
+    how: {
+      hi: "पुण्यार्जक बनने के लिए कृपया अनुज जैन से संपर्क करें।",
+      en: "To become a punyarjak, please contact Anuj Jain."
+    },
+    contacts: [ { name: { hi: "अनुज जैन", en: "Anuj Jain" }, phone: "" } ]
   },
   {
     hidden: true,
@@ -997,6 +1103,16 @@ window.PUNYARJAK = [
   { date: "2026-10-20", kind: "masik", name: "SAMPLE Name Three" },
   { date: "2026-11-03", kind: "saptahik", name: "SAMPLE Name One" },
   { date: "2026-12-15", kind: "masik", name: "SAMPLE Name Four" }
+];
+
+/* Bhaktamber path: monthly punyarjak. Shown on the Daan page as a table of ALL 12 months of the current year.
+   The path is on the 2nd Sunday of each month; the table works out that date by itself.
+   TO ADD a family: copy one line, paste it, change  month: "YYYY-MM"  and the name.  Two families in one month = two lines.
+   If the path is held on another day in a month, add  date: "YYYY-MM-DD"  to that line.
+   TO REMOVE: delete the line, or add  hidden: true  to it. Months with no name show "open for now, you can give your name".
+   Only add a name with that family's permission. Delete the whole block (all of it) to remove the table from the Daan page. */
+window.BHAKTAMBAR = [
+  // { month: "2026-11", name: { hi: "परिवार का नाम", en: "Family name" } },
 ];
 
 /* ---------- 12. Trust and 80G details (shown on the Daan page) ---------- */

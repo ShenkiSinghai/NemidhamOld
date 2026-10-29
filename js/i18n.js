@@ -11,7 +11,9 @@ window.UI = {
     "nav.karyakram": "कार्यक्रम", "nav.karyakram_all": "सभी कार्यक्रम", "nav.calendar": "जैन कैलेंडर",
     "nav.announcements": "सूचनाएं",
     "nav.gallery": "गैलरी", "nav.about": "मंदिर", "nav.about_mandir": "मंदिर के बारे में",
-    "nav.team": "टीम", "nav.dharmshala": "धर्मशाला", "soon": "जल्द आ रही है",
+    "nav.team": "टीम", "nav.suvidha": "सुविधाएँ", "nav.dharmshala": "धर्मशाला",
+    "p.suvidha.h1": "सुविधाएँ", "p.suvidha.lead": "मंदिर में उपलब्ध सुविधाओं की जानकारी।", "suvidha.none": "सुविधाओं की जानकारी जल्द जोड़ी जाएगी।", "home.suvidha_btn": "सुविधाएँ देखें",
+    "d.bhaktamber": "भक्तामर पाठ: मासिक पुण्यार्जक ({year})", "d.bh_month": "महीना", "d.bh_date": "पाठ की तारीख", "d.bh_name": "पुण्यार्जक परिवार", "d.bh_open": "अभी खाली है, आप नाम दे सकते हैं", "soon": "जल्द आ रही है",
     "nav.daan": "दान", "nav.visit": "कैसे पहुँचें",
     "banner.more": "जानें",
 
@@ -113,7 +115,9 @@ window.UI = {
     "nav.karyakram": "Karyakram", "nav.karyakram_all": "All karyakram", "nav.calendar": "Jain Calendar",
     "nav.announcements": "Announcements",
     "nav.gallery": "Gallery", "nav.about": "About", "nav.about_mandir": "About the mandir",
-    "nav.team": "Team", "nav.dharmshala": "Dharmshala", "soon": "Coming soon",
+    "nav.team": "Team", "nav.suvidha": "Facilities", "nav.dharmshala": "Dharmshala",
+    "p.suvidha.h1": "Facilities", "p.suvidha.lead": "What is available for you at the mandir.", "suvidha.none": "Details of the facilities will be added soon.", "home.suvidha_btn": "See facilities",
+    "d.bhaktamber": "Bhaktamber path: monthly punyarjak ({year})", "d.bh_month": "Month", "d.bh_date": "Date of the path", "d.bh_name": "Punyarjak family", "d.bh_open": "Open for now, you can give your name", "soon": "Coming soon",
     "nav.daan": "Daan", "nav.visit": "How to reach",
     "banner.more": "Learn more",
 

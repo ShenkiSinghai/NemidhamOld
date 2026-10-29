@@ -138,6 +138,7 @@
     { k: "nav.about", id: "abt", kids: [
       { k: "nav.about_mandir", href: "about.html", p: "about" },
       { k: "nav.team", href: "team.html", p: "team" },
+      { k: "nav.suvidha", href: "suvidha.html", p: "suvidha" },
       { k: "nav.dharmshala", soon: true }
     ] },
     { k: "nav.visit", href: "visit.html", p: "visit" },
@@ -564,14 +565,13 @@
         (L(sc.sub) ? '<p class="sub-line">' + esc(L(sc.sub)) + "</p>" : "") + body + "</section>";
     }
     var allSecs = vis(a.sections);
-    var secs = allSecs.filter(function (sc) { return !(sc.side && a.poster); }).map(secHtml).join("");
-    var sideSecs = allSecs.filter(function (sc) { return sc.side && a.poster; }).map(secHtml).join("");
+    var secs = allSecs.map(secHtml).join("");
     var people = vis(a.contacts).filter(function (c) { return L(c.name) || c.phone; }).map(function (c) {
       return "<li><span class=\"act-pn\">" + esc(L(c.name)) + (L(c.role) ? "<small>" + esc(L(c.role)) + "</small>" : "") + "</span>" +
         (c.phone ? '<a class="call-btn" href="' + telHref(c.phone) + '"><span aria-hidden="true">📞</span> ' + esc(c.phone) + "</a>" : "") + "</li>";
     }).join("");
     var formOk = /^https?:\/\//i.test(a.formUrl || "");
-    var contact = '<section class="card act-sec act-contact c-green wide"><h2><span class="ic" aria-hidden="true">🎉</span><span>' + esc(L(a.contactTitle) || t("act.contact_h")) + "</span></h2>" +
+    var contact = '<section class="card act-sec act-contact c-green"><h2><span class="ic" aria-hidden="true">🎉</span><span>' + esc(L(a.contactTitle) || t("act.contact_h")) + "</span></h2>" +
       (L(a.contactNote) ? "<p>" + esc(L(a.contactNote)) + "</p>" : "") +
       (people ? '<ul class="act-people">' + people + "</ul>" : "") +
       '<div class="btn-row">' +
@@ -580,21 +580,16 @@
       "</div></section>";
     var poster = a.poster ? '<figure class="act-poster"><a href="' + esc(a.poster) + '" target="_blank" rel="noopener"><img src="' + esc(a.poster) + '" alt="' + esc(L(a.title)) + '"></a>' +
       "<figcaption>" + esc(t("act.poster_hint")) + "</figcaption></figure>" : "";
-    var empty = !paras && !list && !facts && !secs && !sideSecs;
-    var bodyHtml =
-      (soon ? '<span class="chip chip-soon">' + esc(t("act.soon")) + "</span>" : "") +
+    var empty = !paras && !list && !facts && !secs;
+    var head = (soon ? '<span class="chip chip-soon">' + esc(t("act.soon")) + "</span>" : "") +
       (decor ? '<div class="act-decor" aria-hidden="true">' + decor + "</div>" : "") +
       (L(a.banner) ? '<p class="act-ribbon">' + esc(L(a.banner)) + "</p>" : "") +
       (soon && empty ? '<p class="act-soon-text">' + esc(t("act.soon_text")) + "</p>" : "") +
       (facts ? '<dl class="act-facts">' + facts + "</dl>" : "") +
-      (paras || list ? '<div class="card act-sec c-gold wide act-intro">' + paras + list + "</div>" : "") +
-      (secs ? '<div class="act-secs">' + secs + "</div>" : "");
-    if (poster) {
-      host.innerHTML = '<div class="act-layout has-poster"><div class="act-left">' + poster + '<div class="act-side">' + sideSecs + contact + "</div></div>" +
-        '<div class="act-body">' + bodyHtml + "</div></div>";
-    } else {
-      host.innerHTML = '<div class="act-layout"><div class="act-body">' + bodyHtml + (sideSecs ? '<div class="act-secs">' + sideSecs + "</div>" : "") + contact + "</div></div>";
-    }
+      (paras || list ? '<div class="card act-sec c-gold act-intro">' + paras + list + "</div>" : "");
+    host.innerHTML = '<div class="act-page-wrap">' +
+      (poster ? '<div class="act-top has-poster">' + poster + '<div class="act-head">' + head + "</div></div>" : '<div class="act-head">' + head + "</div>") +
+      (secs ? '<div class="act-secs">' + secs + "</div>" : "") + contact + "</div>";
   }
 
   /* ---------- karyakram + calendar ---------- */
@@ -1014,6 +1009,30 @@
   function codeRow(label, value) {
     return '<div class="coderow"><dt>' + esc(label) + '</dt><dd><code>' + esc(value) + "</code>" + copyBtn(value) + "</dd></div>";
   }
+  /* a person's name + call button under a daan card; shown only once a phone number is written */
+  function recContacts(r) {
+    var c = vis(r.contacts).filter(function (x) { return x.phone; }).map(function (x) {
+      return '<a class="call-btn call-sm" href="' + telHref(x.phone) + '"><span aria-hidden="true">📞</span> ' + (L(x.name) ? esc(L(x.name)) + " · " : "") + esc(x.phone) + "</a>";
+    }).join("");
+    return c ? '<div class="r-contacts">' + c + "</div>" : "";
+  }
+  function secondSunday(y, m) { return 1 + ((7 - new Date(y, m, 1).getDay()) % 7) + 7; }
+  function bhaktamberHtml() {
+    if (window.BHAKTAMBAR === undefined) return "";
+    var B = vis(window.BHAKTAMBAR), yr = parseInt(todayISO().slice(0, 4), 10), curYm = todayISO().slice(0, 7), rows = "";
+    for (var m = 0; m < 12; m++) {
+      var ym = yr + "-" + pad2(m + 1);
+      var es = B.filter(function (b) { return String(b.month || b.date || "").slice(0, 7) === ym; });
+      var own = es.filter(function (e) { return e.date; })[0];
+      var date = own ? own.date : ym + "-" + pad2(secondSunday(yr, m));
+      var names = es.map(function (e) { return L(e.name); }).filter(Boolean).join(", ");
+      var d = new Date(date + "T00:00:00");
+      rows += '<tr class="brow' + (ym === curYm ? " now" : "") + '"><td class="bm">' + esc(d.toLocaleDateString(loc(), { month: "long" })) + '</td><td class="bd">' +
+        esc(d.toLocaleDateString(loc(), { weekday: "long", day: "numeric", month: "long" })) + '</td><td class="bn' + (names ? "" : " open") + '">' + esc(names || (ym < curYm ? "-" : t("d.bh_open"))) + "</td></tr>";
+    }
+    return '<section id="bhaktamber"><h2>' + esc(t("d.bhaktamber", { year: yr })) + '</h2><div class="tbl-wrap"><table class="tbl btbl"><thead><tr><th scope="col">' + esc(t("d.bh_month")) +
+      '</th><th scope="col">' + esc(t("d.bh_date")) + '</th><th scope="col">' + esc(t("d.bh_name")) + "</th></tr></thead><tbody>" + rows + "</tbody></table></div></section>";
+  }
   function renderDaan() {
     var D = window.DAAN || {};
     var host = document.getElementById("daan"); if (!host) return;
@@ -1042,7 +1061,7 @@
     if (R.length) {
       html += '<section id="regular"><h2>' + esc(t("d.regular")) + '</h2><p class="measure">' + esc(t("d.regular_p")) + '</p><div class="cards three">' + R.map(function (r) {
         return '<div class="card"><span class="tag">' + esc(L(r.when)) + "</span><h3>" + esc(L(r.title)) + "</h3><p>" + esc(L(r.text)) + "</p>" +
-          (L(r.how) ? '<p class="fine">' + esc(L(r.how)) + "</p>" : "") + "</div>";
+          (L(r.how) ? '<p class="fine">' + esc(L(r.how)) + "</p>" : "") + recContacts(r) + "</div>";
       }).join("") + "</div></section>";
     }
 
@@ -1073,6 +1092,7 @@
           '<button class="pf" type="button" data-k="masik" aria-pressed="false"><i class="dot dot-masik"></i>' + esc(t("kind.masik")) + "</button>" +
           '</div><div id="punya-body"></div>'
         : '<p class="empty">' + esc(t("empty.punya")) + "</p>") + "</section>";
+    html += bhaktamberHtml();
     html += '<p class="thanks">' + esc(t("d.thanks")) + "</p>";
     host.innerHTML = html;
 
@@ -1115,6 +1135,38 @@
         else b.textContent = t("copyfail");
       });
     });
+  }
+
+  /* ---------- suvidha (facilities of the mandir) + Home cards ---------- */
+  function suvidhaCard(f) {
+    var c = ACT_COLORS[f.color] ? f.color : "orange";
+    var info = vis(f.info).filter(function (i) { return L(i.value); }).map(function (i) {
+      return "<div><dt>" + (i.icon ? '<span aria-hidden="true">' + esc(i.icon) + "</span> " : "") + esc(L(i.label)) + "</dt><dd>" + esc(L(i.value)) + "</dd></div>";
+    }).join("");
+    var people = vis(f.contacts).filter(function (x) { return L(x.name) || x.phone; }).map(function (x) {
+      return '<li><span class="act-pn">' + esc(L(x.name)) + (L(x.role) ? "<small>" + esc(L(x.role)) + "</small>" : "") + "</span>" +
+        (x.phone ? '<a class="call-btn" href="' + telHref(x.phone) + '"><span aria-hidden="true">📞</span> ' + esc(x.phone) + "</a>" : "") + "</li>";
+    }).join("");
+    return '<section class="card act-sec su-card c-' + c + '"><h2>' + (f.icon ? '<span class="ic" aria-hidden="true">' + esc(f.icon) + "</span>" : "") + "<span>" + esc(L(f.title)) + "</span></h2>" +
+      actParas(f.paragraphs) + (info ? '<dl class="su-rows">' + info + "</dl>" : "") + actList(f.list) +
+      (L(f.contactNote) ? '<p class="su-note">' + esc(L(f.contactNote)) + "</p>" : "") + (people ? '<ul class="act-people">' + people + "</ul>" : "") + "</section>";
+  }
+  function renderSuvidha() {
+    var host = document.getElementById("suvidha"); if (!host) return;
+    var list = vis(window.SUVIDHA);
+    host.innerHTML = list.length ? '<div class="act-secs su-grid">' + list.map(suvidhaCard).join("") + "</div>" : '<p class="empty">' + esc(t("suvidha.none")) + "</p>";
+  }
+  function renderHomeSuvidha() {
+    var grid = $(".home-cta"); if (!grid) return;
+    $$(".home-suv", grid).forEach(function (e) { e.parentNode.removeChild(e); });
+    var pins = vis(window.SUVIDHA).filter(function (f) { return f.pinned; });
+    pins.forEach(function (f) {
+      var d = document.createElement("div");
+      d.className = "card home-suv";
+      d.innerHTML = "<h2>" + (f.icon ? esc(f.icon) + " " : "") + esc(L(f.title)) + "</h2><p>" + esc(L(f.short)) + '</p><a class="btn btn-line" href="suvidha.html">' + esc(t("home.suvidha_btn")) + "</a>";
+      grid.appendChild(d);
+    });
+    grid.classList.toggle("three", pins.length > 0);
   }
 
   /* ---------- visit ---------- */
@@ -1206,10 +1258,11 @@
     switch (page) {
       case "home":
         renderHero(); renderPanel(); timer = setInterval(renderPanel, 60000);
-        renderHomeYojana(); renderAnnouncements(); renderHomeEvents(); renderHomeGallery(); renderConnect();
+        renderHomeYojana(); renderAnnouncements(); renderHomeEvents(); renderHomeGallery(); renderHomeSuvidha(); renderConnect();
         break;
       case "yojana": renderYojanaPage(); break;
       case "activity": renderActivityPage(); break;
+      case "suvidha": renderSuvidha(); break;
       case "karyakram": renderKaryakram(); break;
       case "calendar": renderCalendar(); break;
       case "announcements": renderAnnouncementsPage(); break;
